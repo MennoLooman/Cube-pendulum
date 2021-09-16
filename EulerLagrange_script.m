@@ -39,6 +39,7 @@ L = simplify(L);
 %Dampening 
 N = [0 0; 0 damp_motor];
 D = 1/2 * qd'*N*qd;
+D = simplify(D);
 
 %(d/dt)(dL/dqd)
 L1th1 = simplify(dt(diff(L,th1d)));
