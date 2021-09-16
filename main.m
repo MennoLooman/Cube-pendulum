@@ -3,25 +3,31 @@
 % outputs to a variable in the Workspace for further processing.
 
 close;clear;clc;
-
+hwinit;
 % Sample rate in sec.
 h = 0.02;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 10;
+Tsim = 5;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
 
 % Input vector
-amplitude = 0;%0.02;
+amplitude = 0.01;%0.02;
 omega = 1;
-u = amplitude * sin(omega * t);
+%u = amplitude * sin(omega * t);
+u = ones(size(t))*0.005;
+input_V = timeseries(u,t);
+
+%simulink stuff
+ds = Simulink.SimulationData.Dataset;
+ds = ds.addElement(input_V,'in1_signal');
 
 % Variable that goes to Simulink
 % (First column: time, Second column: input values)
-simin = [t, u];
+simin = [t, u, input_V];
 
 %% Start experiment
 sim qubetemplate_altered

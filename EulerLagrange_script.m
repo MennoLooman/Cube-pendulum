@@ -2,7 +2,7 @@ clear,clc
 %% System description
 %States and Parameters:
 syms th1 th1d th1dd al1 al1d al1dd real1 %states
-syms m_p r_p r_m I_p I_m g torque real1     %parameters
+syms m_p r_p r_m I_p I_m g real1 motor_constant voltage damp_motor  %parameters
 q   = [th1       al1   ]';
 qd  = [th1d      al1d  ]';
 qdd = [th1dd     al1dd ]';
@@ -37,8 +37,8 @@ L = K - P;
 L = simplify(L);
 
 %Dampening 
-N = [0 0; 0 0];
-D = 0;
+N = [0 0; 0 damp_motor];
+D = 1/2 * qd'*N*qd;
 
 %(d/dt)(dL/dqd)
 L1th1 = simplify(dt(diff(L,th1d)));
@@ -54,8 +54,7 @@ Dal1 = simplify(diff(D,al1d));
 
 %F
 Fth1 = 0;
-Fal1 = torque;
-
+Fal1 = motor_constant * voltage; %motor_constant = Kr/R
 
 %% Physical Equations
 %Physical1 equations are cal1culated where th11dd and th12dd are expressed as
@@ -78,9 +77,11 @@ r_m_val = 0.085; %m
 % I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2 %Wordt niet gebruikt in equations.
 I_m_val = 1.0*10^-3; %kg*m^2 ??????
 g_val = 9.81; %m/s^2
+motor_constant_val = 1;
+damp_motor_val = 0.01;
 
 %function for evaluating:
-MNQF = matlabFunction(subs(MNQF,{m_p r_p r_m I_m g torque}, {m_p_val r_p_val r_m_val I_m_val g_val 0} )); 
+MNQF = matlabFunction(subs(MNQF,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
 
 x0 = [pi/4, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
 t_s = 0.001;  %time step
@@ -97,7 +98,7 @@ for i = 1:t_end/t_s
     x(i+1,4) = [0 1]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,4);
 end
 
-figure(1)
+figure()
 clf
 hold on
 plot(t_v,x(:,1),'m')
