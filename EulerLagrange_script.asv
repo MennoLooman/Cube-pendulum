@@ -24,12 +24,8 @@ P = r_p*m_p*g*(cos(al1));
 %}
 %new cartesian
 Vx = (-cos(al1)*r_m + sin(al1)*r_p*sin(th1))*al1d -cos(al1)*r_p*cos(th1)*th1d;
-Vy = ( sin(al1)*r_m + cos(al1)*r_p*sin(th1))*al1d +sin(al1)*r_p*cos(th1)*th1d;
-Vz = sin(th1)*r_p*th1d;
+Vy = (sin(al1);l
 
-K = (1/2)*m_p*(Vx^2 + Vy^2 + Vz^2) + ...    %pendulum cartesian
-    (1/2)*I_m*al1d^2;                       %motor alpha
-P = r_p*m_p*g*(1-cos(th1));
 
 %% Euler Lagrange equations
 %Lagrangian
@@ -75,14 +71,14 @@ MNQF = M^-1*NQF;
 m_p_val = 0.024; %kg
 r_p_val = 0.129/2; %kg
 r_m_val = 0.085; %m
-% I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2 %Wordt niet gebruikt in equations.
-I_m_val = 1.0*10^-3; %kg*m^2 ??????
+I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2
+I_m_val = 4.0*10^-6; %kg*m^2 ??????
 g_val = 9.81; %m/s^2
 
 %function for evaluating:
-MNQF = matlabFunction(subs(MNQF,{m_p r_p r_m I_m g torque}, {m_p_val r_p_val r_m_val I_m_val g_val 0} )); 
+MNQF = matlabFunction(subs(MNQF,{m_p r_p r_m I_p I_m g torque}, {m_p_val r_p_val r_m_val I_p_val I_m_val g_val 0} )); 
 
-x0 = [pi/4, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
+x0 = [1/2*pi, 1/2*pi, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
 t_s = 0.001;  %time step
 t_end = 3;  %time end
 t_v = 0:t_s:t_end;
@@ -93,14 +89,14 @@ x(1,:) = x0;
 for i = 1:t_end/t_s 
     x(i+1,1) = x(i,3)*t_s + x(i,1);
     x(i+1,2) = x(i,4)*t_s + x(i,2);
-    x(i+1,3) = [1 0]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,3);
-    x(i+1,4) = [0 1]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,4);
+    x(i+1,3) = [1 0]*MNQF(x(i,2),x(i,3),x(i,4))*t_s + x(i,3);
+    x(i+1,4) = [0 1]*MNQF(x(i,2),x(i,3),x(i,4))*t_s + x(i,4);
 end
 
 figure(1)
 clf
 hold on
-plot(t_v,x(:,1),'m')
+plot(t_v,x(:,1),'k')
 plot(t_v,x(:,2),'b')
 plot(t_v,x(:,3),'r')
 plot(t_v,x(:,4),'g')
