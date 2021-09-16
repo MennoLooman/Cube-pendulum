@@ -1,4 +1,3 @@
-clear,clc
 %% System description
 %States and Parameters:
 syms th1 th1d th1dd al1 al1d al1dd real1 %states
@@ -69,7 +68,7 @@ vars = [th1dd al1dd];
 %% Simulation
 %th1e system of Physical equations above will be solved for t, to use the
 %MATLAB solver, the equations must be altered to be in the proper form.
-MNQF = M^-1*NQF;
+MNQF_para = M^-1*NQF;
 
 % First we must set the parameters
 m_p_val = 0.024; %kg
@@ -78,11 +77,11 @@ r_m_val = 0.085; %m
 % I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2 %Wordt niet gebruikt in equations.
 I_m_val = 1.0*10^-3; %kg*m^2 ??????
 g_val = 9.81; %m/s^2
-motor_constant_val = 1;
-damp_motor_val = 0.01;
+motor_constant_val = 1; %Kr/R
+damp_motor_val = 0.01; %random guess
 
 %function for evaluating:
-MNQF = matlabFunction(subs(MNQF,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
+MNQF = matlabFunction(subs(MNQF_para,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
 
 x0 = [pi/4, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
 t_s = 0.001;  %time step
