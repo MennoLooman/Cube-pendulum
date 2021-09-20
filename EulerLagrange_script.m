@@ -6,6 +6,17 @@ q   = [th1       al1   ]';
 qd  = [th1d      al1d  ]';
 qdd = [th1dd     al1dd ]';
 
+%% Declear real variables
+assume(m_p, 'real');
+assume(r_p, 'real');
+assume(r_m, 'real');
+assume(I_p, 'real');
+assume(I_m, 'real');
+assume(g, 'real');
+assume(motor_constant, 'real');
+assume(voltage, 'real');
+assume(damp_motor, 'real');
+
 %% Energy bal1ance
 %{
 Old (polar)
@@ -83,7 +94,7 @@ damp_motor_val = 0.01; %random guess
 %function for evaluating:
 MNQF = matlabFunction(subs(MNQF_para,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
 
-x0 = [pi/4, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
+x0 = [pi+0.00001, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
 t_s = 0.001;  %time step
 t_end = 3;  %time end
 t_v = 0:t_s:t_end;
