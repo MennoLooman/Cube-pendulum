@@ -9,16 +9,18 @@ h = 0.02;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 5;
+Tsim = 3;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
+N = Tsim/h; %N+1 samples
 
 % Input vector
-amplitude = 0.01;%0.02;
+amplitude = 0.015;%0.02;
 omega = 1;
 %u = amplitude * sin(omega * t);
-u = ones(size(t))*0.005;
+%u = ones(size(t))*amplitude;
+u = [zeros(N/5+1,1); ones(N/5,1); -ones(N/5,1); zeros(N/5,1); ones(N/5,1)]*amplitude;
 input_V = timeseries(u,t);
 
 %simulink stuff
@@ -32,15 +34,12 @@ simin = [t, u, input_V];
 %% Start experiment
 sim qubetemplate_altered
 
+
 %% Collect output data
 % (make sure that samples are taken every 'h' seconds! in 'To Workspace' block)
 
-% If output type 'Timeseries'
-%y = simout.Data;
-
-% If output type 'Array' 
-% y = simout;
+y = [theta(:,2) alpha(:,2)];
 
 %% Plot data
-plot(t, alpha(:,2), t, theta(:,2))
-legend('alpha', 'theta')
+plot(t, y(:,1), t, y(:,2))
+legend('theta', 'alpha')
