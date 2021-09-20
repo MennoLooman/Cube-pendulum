@@ -9,7 +9,7 @@ h = 0.02;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 3;
+Tsim = 0.5;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
