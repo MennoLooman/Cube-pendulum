@@ -1,5 +1,5 @@
 %% Run first 
-load('data/run1.mat');
+load('data/run5.mat');
 t1 = u(:,1);
 u1 = u(:,2);
 y1 = y;
@@ -11,7 +11,7 @@ for i = 2:size(y1,1)
     y1_hat(i,:) = x1_hat(i,3:4);
 end
 %% Run second
-load('data/run3.mat');
+load('data/run4.mat');
 t2 = u(:,1);
 u2 = u(:,2);
 y2 = y;
