@@ -9,7 +9,7 @@ h = 0.02;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 0.5;
+Tsim = 2;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
@@ -43,3 +43,6 @@ y = [theta(:,2) alpha(:,2)];
 %% Plot data
 plot(t, y(:,1), t, y(:,2))
 legend('theta', 'alpha')
+
+%% Save data
+save('data/run3.mat','u','y')
