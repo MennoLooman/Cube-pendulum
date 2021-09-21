@@ -45,4 +45,4 @@ plot(t, y(:,1), t, y(:,2))
 legend('theta', 'alpha')
 
 %% Save data
-save('data/run3.mat','u','y')
+save('data/run1.mat','u','y')
