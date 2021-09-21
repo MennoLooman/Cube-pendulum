@@ -1,0 +1,13 @@
+load('data/run1.mat');
+u1 = u(:,2);
+y1 = y(:,2);
+x1_hat = zeros(size(y1,1),4);
+y1_hat = zeros(size(y1,1),2);
+for i = 2:size(y1,1)
+    x1_hat(i,:) = x1_hat(i-1,:) + h * (A_est * x1_hat(i-1,:)' + B_est * u1(i-1))';
+    y1_hat(i,:) = x1_hat(i,3:4);
+end
+%% 
+load('data/run3.mat');
+u2 = u(:,2);
+y2 = y(:,2);
