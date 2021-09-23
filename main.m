@@ -20,16 +20,17 @@ amplitude = 0.00;%0.02;
 omega = 5;
 %u = amplitude * sin(omega * t);
 %u = ones(size(t))*amplitude;
-u = [zeros(N/10+1,1); 
-    0.5*sin(4 * (h:h:N/5*h))'; 
-    0.6*sin(8 * (h:h:N/5*h))'; 
-    0.8*sin(15 * (h:h:N/5*h))'; 
-    sin(20 * (h:h:N/5*h))'; 
-    -ones(N/50,1); 
-    ones(N/50,1); 
-    -ones(N/50,1); 
-    ones(N/50,1);
-    zeros(N/50,1)]*amplitude;
+u = zeros(size(t));
+% u = [zeros(N/10+1,1); 
+%     0.5*sin(4 * (h:h:N/5*h))'; 
+%     0.6*sin(8 * (h:h:N/5*h))'; 
+%     0.8*sin(15 * (h:h:N/5*h))'; 
+%     sin(20 * (h:h:N/5*h))'; 
+%     -ones(N/50,1); 
+%     ones(N/50,1); 
+%     -ones(N/50,1); 
+%     ones(N/50,1);
+%     zeros(N/50,1)]*amplitude;
 input_V = timeseries(u,t);
 
 %simulink stuff
