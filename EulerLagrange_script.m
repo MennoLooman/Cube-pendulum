@@ -1,7 +1,7 @@
 %% System description
 %States and Parameters:
 syms th1 th1d th1dd al1 al1d al1dd real1 %states
-syms m_p r_p r_m I_p I_m g real1 motor_constant voltage damp_motor  %parameters
+syms m_p r_p r_m I_p I_m g real1 motor_constant voltage damp_motor damp_pendulum %parameters
 q   = [th1       al1   ]';
 qd  = [th1d      al1d  ]';
 qdd = [th1dd     al1dd ]';
@@ -16,6 +16,7 @@ assume(g, 'real');
 assume(motor_constant, 'real');
 assume(voltage, 'real');
 assume(damp_motor, 'real');
+assume(damp_pendulum, 'real');
 
 %% Energy bal1ance
 %{
@@ -47,7 +48,8 @@ L = K - P;
 L = simplify(L);
 
 %Dampening 
-N = [0 0; 0 damp_motor];
+%N = [0 0; 0 damp_motor];
+N = [damp_pendulum 0; 0 damp_motor];
 D = 1/2 * qd'*N*qd;
 D = simplify(D);
 
@@ -81,45 +83,45 @@ vars = [th1dd al1dd];
 %MATLAB solver, the equations must be altered to be in the proper form.
 MNQF_para = M^-1*NQF;
 
-% First we must set the parameters
-m_p_val = 0.024; %kg
-r_p_val = 0.129/2; %kg
-r_m_val = 0.085; %m
-% I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2 %Wordt niet gebruikt in equations.
-I_m_val = 1.0*10^-3; %kg*m^2 ??????
-g_val = 9.81; %m/s^2
-motor_constant_val = 1; %Kr/R
-damp_motor_val = 0.01; %random guess
-
-%function for evaluating:
-MNQF = matlabFunction(subs(MNQF_para,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
-
-x0 = [pi+0.00001, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
-t_s = 0.001;  %time step
-t_end = 3;  %time end
-t_v = 0:t_s:t_end;
-x = zeros(t_end/t_s+1,4); %
-x(1,:) = x0;
-
-%loop
-for i = 1:t_end/t_s 
-    x(i+1,1) = x(i,3)*t_s + x(i,1);
-    x(i+1,2) = x(i,4)*t_s + x(i,2);
-    x(i+1,3) = [1 0]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,3);
-    x(i+1,4) = [0 1]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,4);
-end
-
-figure()
-clf
-hold on
-plot(t_v,x(:,1),'m')
-plot(t_v,x(:,2),'b')
-plot(t_v,x(:,3),'r')
-plot(t_v,x(:,4),'g')
-
-%ylim([-50 40])
-xlim([0 t_end])
-legend("theta","alpha","theta_d","alpha_d")
+% % First we must set the parameters
+% m_p_val = 0.024; %kg
+% r_p_val = 0.129/2; %kg
+% r_m_val = 0.085; %m
+% % I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2 %Wordt niet gebruikt in equations.
+% I_m_val = 1.0*10^-3; %kg*m^2 ??????
+% g_val = 9.81; %m/s^2
+% motor_constant_val = 1; %Kr/R
+% damp_motor_val = 0.01; %random guess
+% 
+% %function for evaluating:
+% MNQF = matlabFunction(subs(MNQF_para,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
+% 
+% x0 = [pi+0.00001, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
+% t_s = 0.001;  %time step
+% t_end = 3;  %time end
+% t_v = 0:t_s:t_end;
+% x = zeros(t_end/t_s+1,4); %
+% x(1,:) = x0;
+% 
+% %loop
+% for i = 1:t_end/t_s 
+%     x(i+1,1) = x(i,3)*t_s + x(i,1);
+%     x(i+1,2) = x(i,4)*t_s + x(i,2);
+%     x(i+1,3) = [1 0]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,3);
+%     x(i+1,4) = [0 1]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,4);
+% end
+% 
+% figure()
+% clf
+% hold on
+% plot(t_v,x(:,1),'m')
+% plot(t_v,x(:,2),'b')
+% plot(t_v,x(:,3),'r')
+% plot(t_v,x(:,4),'g')
+% 
+% %ylim([-50 40])
+% xlim([0 t_end])
+% legend("theta","alpha","theta_d","alpha_d")
 
 %% Functions
 function res = dt(input)
