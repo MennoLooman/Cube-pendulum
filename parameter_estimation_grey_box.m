@@ -31,7 +31,7 @@ opt_id = greyestOptions('InitialState','zero','Display','on');
 [sys_ge, x0_ge] = greyest(data,init_sys,opt_id);
 %PEM to refine model
 sys_pem = pem(data,sys_ge,opt_id); %use same opt, data as greyest. 
-
+%TODO: check is greyest already does PEM
 %% Simulate identified model
 opt_sim = simOptions('AddNoise',true);
 y = sim(sys,udata,opt_sim);
