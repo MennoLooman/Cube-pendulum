@@ -48,8 +48,8 @@ L = K - P;
 L = simplify(L);
 
 %Dampening 
-%N = [0 0; 0 damp_motor];
-N = [damp_pendulum 0; 0 damp_motor];
+N = [0 0; 0 damp_motor];
+%N = [damp_pendulum 0; 0 damp_motor];
 D = 1/2 * qd'*N*qd;
 D = simplify(D);
 
@@ -81,8 +81,8 @@ vars = [th1dd al1dd];
 %% Simulation
 %th1e system of Physical equations above will be solved for t, to use the
 %MATLAB solver, the equations must be altered to be in the proper form.
-MNQF_para = M^-1*NQF;
-
+% MNQF_para = M^-1*NQF;
+% 
 % % First we must set the parameters
 % m_p_val = 0.024; %kg
 % r_p_val = 0.129/2; %kg

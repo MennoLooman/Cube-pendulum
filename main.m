@@ -4,6 +4,7 @@
 
 close;clear;clc;
 hwinit;
+load('data/run4.mat');
 % Sample rate in sec.
 h = 0.02;
 
@@ -20,7 +21,7 @@ amplitude = 0.00;%0.02;
 omega = 5;
 %u = amplitude * sin(omega * t);
 %u = ones(size(t))*amplitude;
-u = zeros(size(t));
+%u = zeros(size(t));
 % u = [zeros(N/10+1,1); 
 %     0.5*sin(4 * (h:h:N/5*h))'; 
 %     0.6*sin(8 * (h:h:N/5*h))'; 
