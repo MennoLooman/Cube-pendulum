@@ -16,7 +16,7 @@ d_p_I = 3.684e-05;%3.66e-2
 I_m_I = 4.6e-6;
 m_p_I = 0.024;
 g_I = 9.812;
-m_c_I = 4.1e-3;%0.042/8.4 = 5e-3
+m_c_I = 5;%0.042/8.4 = 5e-3
 
 %    86,11%
 %    r_p = 0.08063
@@ -34,7 +34,7 @@ init_sys = idgrey(@sys_matrices2,parameters2,'c');
 %interesting options: 'EnforceStability' 'MaxIterations' 
 opt_id = greyestOptions('InitialState','zero','Display','on','EnforceStability',true);
 %opt_id.Regularization.Lambda = 1;
-opt_id.Regularization.R = [1e5, 1e5,1e-3,1,1e-3,1e3,1e5,1e-3];
+opt_id.Regularization.R = [1e5, 1e5,1e-3,1,1,1,1e-5];
 %opt_id.Regularization.Nominal = 'model';
 %opt_id.OutputWeight = [1e-5 0; 0 1e5];
 
