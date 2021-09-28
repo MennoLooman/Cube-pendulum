@@ -1,5 +1,5 @@
 %% Load data
-load('data/run4.mat');
+load('data/run6.mat');
 t = u(:,1);
 h = t(2)-t(1);
 u = u(:,2);
@@ -11,33 +11,24 @@ clearvars -except data u y t h Ac Bc
 %% parameter estimate
 r_m_I = 0.085;
 r_p_I = 0.129/2;
-d_m_I = 2.059e-3;
-d_p_I = 0.0366;
-I_m_I = 4.6e-6;
+d_m_I = 2.059e-2;%2.059e-3
+d_p_I = 3.66e-4;%3.66e-2
+I_m_I = 4.6e-5;%4.6e-6
 m_p_I = 0.024;
-g_I = 9.81;
+g_I = 9.8125;
 m_c_I = 0.042/8.4;
 %% Get linearized system
 %guess physical parameters (stable equi)
-% g1_init = -r_m/r_p;
-% g2_init = (-d_m/I_m);
-% g3_init = (-(g*(m_p*r_m^2 + I_m))/(I_m*r_p));
-% g4_init = (g*m_p*r_m)/I_m;
-% g5_init = m_c/I_m;
 parameters = {'r_m', r_m_I; 'r_p',r_p_I;'d_m',d_m_I;'I_m',I_m_I;'m_p',m_p_I;'g',g_I;'m_c',m_c_I};
-%parameters = {'g1',g1_init;'g2',g2_init;'g3',g3_init;'g4',g4_init;'g5',g5_init};
-init_sys = idgrey(@sys_matrices,parameters,'c');%,{},0);
-
-% g6_init = (m_p*r_m^2+I_m)/(m_p*r_p^2);
-% g7_init = -d_p/I_m;
-% parameters = {'g1',g1_init;'g2',g2_init;'g3',g3_init;'g4',g4_init;'g5',g5_init;'g6',g6_init;'g7',g7_init};
-% init_sys = idgrey(@sys_matrices2,parameters,'c');%,{},0);
+parameters2 = {'r_m', r_m_I; 'r_p',r_p_I;'d_m',d_m_I;'d_p',d_p_I;'I_m',I_m_I;'m_p',m_p_I;'g',g_I;'m_c',m_c_I};
+%init_sys = idgrey(@sys_matrices,parameters,'c');
+init_sys = idgrey(@sys_matrices2,parameters2,'c');
 
 %% Identification
 %interesting options: 'EnforceStability' 'MaxIterations' 
-opt_id = greyestOptions('InitialState','zero','Display','on');
+opt_id = greyestOptions('InitialState','zero','Display','on','EnforceStability',true);
 %opt_id.Regularization.Lambda = 1;
-opt_id.Regularization.R = [1e5, 1e5,1e-3,1,1,1e5,1];
+opt_id.Regularization.R = [1e5, 1e5,1e-3,1,1,1,1];
 %opt_id.Regularization.Nominal = 'model';
 %opt_id.OutputWeight = [1e-5 0; 0 1e5];
 
