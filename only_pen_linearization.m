@@ -1,8 +1,8 @@
 %% load 
-EulerLagrange_script_only_pendulum;
+only_pen_EulerLagrange_script;
 clearvars -except MNQF_para th1d th1 voltage
 
-x = [th1d th1];
+x = [th1d th1]; 
 x_d = [MNQF_para',th1d]; %dynamics
 stable_equi = 1;  %[0 unstable / 1 stable]
 
