@@ -1,9 +1,9 @@
 %% Load data
-load('data/run7.mat');
-t = u(:,1);
+load('data/run8.mat');
+t = u(1:12/h,1);
 h = t(2)-t(1);
-u = u(:,2);
-y = y(:,1);
+u = u(1:12/h,2);
+y = y(1:12/h,1);
 data = iddata(y,u,h); % data file used for grey_est and pem
 %linearization;
 clearvars -except data u y t h Ac Bc
@@ -24,7 +24,8 @@ init_sys = idgrey(@sys_matrices,parameters,'c');
 
 %% Identification
 %interesting options: 'EnforceStability' 'MaxIterations' 
-opt_id = greyestOptions('Display','on');
+opt_id = greyestOptions('InitialState','estimate','Display','on');
+opt_id.EnforceStability = true;
 %opt_id.Regularization.Lambda = 1e-5;
 opt_id.Regularization.R = [1e3, 1, 1e2, 1e3];
 %opt_id.Regularization.Nominal = 'model';
