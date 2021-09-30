@@ -5,7 +5,7 @@ A = expm(Ac*h);
 B = h*sys_pem.B;
 
 %% Run first estimation
-load('data/run5.mat');
+load('data/run7.mat');
 t1 = u(:,1);
 u1 = u(:,2);
 y1 = y;
@@ -16,7 +16,7 @@ for i = 2:size(y1,1)
     y1_hat(i,:) = x1_hat(i,3:4);
 end
 %% Run second validation
-load('data/run4.mat');
+load('data/run8.mat');
 t2 = u(:,1);
 u2 = u(:,2);
 y2 = y;
