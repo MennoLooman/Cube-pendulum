@@ -1,7 +1,7 @@
 %% System description
 %States and Parameters:
 syms th1 th1d th1dd al1 al1d al1dd real1 %states
-syms m_p r_p r_m I_p I_m g real1 motor_constant voltage damp_motor damp_pendulum %parameters
+syms m_p r_p r_m I_p I_m s_m g real1 motor_constant voltage damp_motor damp_pendulum %parameters
 q   = [th1       al1   ]';
 qd  = [th1d      al1d  ]';
 qdd = [th1dd     al1dd ]';
@@ -10,6 +10,7 @@ qdd = [th1dd     al1dd ]';
 assume(m_p, 'real');
 assume(r_p, 'real');
 assume(r_m, 'real');
+assume(s_m, 'real');
 assume(I_p, 'real');
 assume(I_m, 'real');
 assume(g, 'real');
@@ -40,7 +41,8 @@ Vz = sin(th1)*r_p*th1d;
 
 K = (1/2)*m_p*(Vx^2 + Vy^2 + Vz^2) + ...    %pendulum cartesian
     (1/2)*I_m*al1d^2;                       %motor alpha
-P = r_p*m_p*g*(1-cos(th1));
+P = r_p*m_p*g*(1-cos(th1)) + ...            %pendulum potential
+    0.5*al1*s_m*al1;                        %spring wire motor
 
 %% Euler Lagrange equations
 %Lagrangian
@@ -48,8 +50,8 @@ L = K - P;
 L = simplify(L);
 
 %Dampening 
-N = [0 0; 0 damp_motor];
-%N = [damp_pendulum 0; 0 damp_motor];
+%N = [0 0; 0 damp_motor];
+N = [damp_pendulum 0; 0 damp_motor];
 D = 1/2 * qd'*N*qd;
 D = simplify(D);
 
@@ -81,7 +83,7 @@ vars = [th1dd al1dd];
 %% Simulation
 %th1e system of Physical equations above will be solved for t, to use the
 %MATLAB solver, the equations must be altered to be in the proper form.
-% MNQF_para = M^-1*NQF;
+MNQF_para = M^-1*NQF;
 % 
 % % First we must set the parameters
 % m_p_val = 0.024; %kg

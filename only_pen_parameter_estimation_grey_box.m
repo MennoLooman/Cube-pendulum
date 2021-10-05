@@ -1,16 +1,16 @@
 %% Load data
-load('data/run8.mat');
-t = u(1:12/h,1);
+load('data/run9_pend.mat');
+t = u(:,1);
 h = t(2)-t(1);
-u = u(1:12/h,2);
-y = y(1:12/h,1);
+u = u(:,2);
+y = y(:,1);
 data = iddata(y,u,h); % data file used for grey_est and pem
 %linearization;
-clearvars -except data u y t h Ac Bc
+clearvars -except data u y t h Ac Bc x0
 
 %% parameter estimate
 r_p_I = 0.08063;
-d_p_I = 3.685e-05; %3.685e-05
+d_p_I = 1e-05; %3.685e-05
 m_p_I = 0.024;
 g_I = 9.8125; %9.812
 
@@ -18,7 +18,7 @@ g_I = 9.8125; %9.812
 %guess physical parameters (stable equi)
 parameters = {'r_p',r_p_I;'d_p',d_p_I;'m_p',m_p_I;'g',g_I};
 init_sys = idgrey(@sys_matrices,parameters,'c');
-% 
+%   
 % parameters2 = {'g1',-d_p_I/(m_p_I*r_p_I^2) ;'g2',-g_I/r_p_I};
 % init_sys = idgrey(@sys_matrices2,parameters2,'c');
 

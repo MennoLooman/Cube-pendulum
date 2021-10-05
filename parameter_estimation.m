@@ -2,6 +2,7 @@
 %main;
 %linearization;
 load('data/run5.mat');
+h = 0.02;
 clearvars -except u y h
 %% Prediction
 y_hat = zeros(size(y));
