@@ -1,4 +1,4 @@
-git stau%% Sample code to run experiment from script,
+%% Sample code to run experiment from script,
 % specifying a fixed input signal and recording the measured
 % outputs to a variable in the Workspace for further processing.
 
@@ -55,4 +55,4 @@ plot(t, y(:,1), t, y(:,2))
 legend('theta', 'alpha')
 
 %% Save data
-save('data/run6.mat','u','y')
+save('data/run13.mat','u','y')

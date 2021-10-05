@@ -17,6 +17,7 @@ I_m_I = 4.6e-6;
 %m_p_I = 0.024;
 %g_I = 9.812;
 m_c_I = 5e-3;%0.042/8.4 = 5e-3
+s_m_I = 1;%?
 
 %    96,1%
 %    r_p = 0.08101
@@ -26,7 +27,7 @@ m_c_I = 5e-3;%0.042/8.4 = 5e-3
 %% Get linearized system
 %guess physical parameters (stable equi)
 %parameters = {'r_m', r_m_I; 'r_p',r_p_I;'d_m',d_m_I;'I_m',I_m_I;'m_p',m_p_I;'g',g_I;'m_c',m_c_I};
-parameters2 = {'r_m',r_m_I;'d_m',d_m_I;'I_m',I_m_I;'m_c',m_c_I};
+parameters2 = {'r_m',r_m_I;'d_m',d_m_I;'I_m',I_m_I;'m_c',m_c_I;'s_m',s_m_I};
 %init_sys = idgrey(@sys_matrices,parameters,'c');
 init_sys = idgrey(@sys_matrices2,parameters2,'c');
 
@@ -34,7 +35,7 @@ init_sys = idgrey(@sys_matrices2,parameters2,'c');
 %interesting options: 'EnforceStability' 'MaxIterations' 
 opt_id = greyestOptions('InitialState','zero','Display','on','EnforceStability',true);
 %opt_id.Regularization.Lambda = 1;
-opt_id.Regularization.R = [1e5, 1e5,1e-3,1,1e-3,1e3,1e5,1e-3];
+%opt_id.Regularization.R = [1e5, 1e5,1e-3,1,1e-3,1e3,1e5,1e-3];
 %opt_id.Regularization.Nominal = 'model';
 %opt_id.OutputWeight = [1e-5 0; 0 1e5];
 
@@ -62,13 +63,13 @@ function [A,B,C,D] = sys_matrices(r_m,r_p,d_m,I_m,m_p,g,m_c,Ts) %Ts is needed fo
 end
 
 %added pendulum resistance
-function [A,B,C,D] = sys_matrices2(r_m,d_m,I_m,m_c,Ts) %Ts is needed for greyest
+function [A,B,C,D] = sys_matrices2(r_m,d_m,I_m,m_c,s_m,Ts) %Ts is needed for greyest
     r_p = 0.08063;%0.08101;
     d_p = 2.904e-05;%1.731e-05;
     m_p = 0.024;
     g = 9.813;%9.812;
-    A = [-d_p*(m_p*r_m^2+I_m)/(I_m*m_p*r_p^2) d_m*r_m/(I_m*r_p) -g*(m_p*r_m^2 + I_m)/(I_m*r_p) 0; 
-         r_m*d_p/(I_m*r_p)                    -d_m/I_m          (g*m_p*r_m)/I_m                  0;
+    A = [-d_p*(m_p*r_m^2+I_m)/(I_m*m_p*r_p^2) d_m*r_m/(I_m*r_p) -g*(m_p*r_m^2 + I_m)/(I_m*r_p) (r_m*s_m)/(I_m*r_p); 
+         r_m*d_p/(I_m*r_p)                    -d_m/I_m          (g*m_p*r_m)/I_m                 -s_m/I_m;
          eye(2)      zeros(2)];
     B = [-m_c*r_m/(I_m*r_p); 
          m_c/I_m;
