@@ -9,18 +9,19 @@ h = 0.02;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 10;
+Tsim = 5;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
 N = Tsim/h; %N+1 samples
 
 % Input vector
-amplitude = 0.01;%0.02;
+amplitude = 0.017;%0.02;
 omega = 5;
 %u = ([10*h:h/Tsim:1+10*h]'+0.1) .* sin([10*h:h/Tsim*20:20+10*h]' .* t) * amplitude;
 %u = ones(size(t))*amplitude;
-u = zeros(size(t));
+%u = zeros(size(t));
+u = [zeros(1/h,1); sin(20 * (h:h:N/5*h))' ; zeros((Tsim/h - (N/5) - 50)+1,1)] * amplitude;
 % u = [zeros(N/10+1,1); 
 %     0.5*sin(4 * (h:h:N/5*h))'; 
 %     0.6*sin(8 * (h:h:N/5*h))'; 
@@ -55,4 +56,4 @@ plot(t, y(:,1), t, y(:,2))
 legend('theta', 'alpha')
 
 %% Save data
-save('data/run13.mat','u','y')
+save('data/AB/r5_AB.mat','u','y')

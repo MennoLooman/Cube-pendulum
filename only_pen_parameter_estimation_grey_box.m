@@ -1,16 +1,16 @@
 %% Load data
-load('data/run8_pend.mat');
+load('data/run9_pend.mat');
 t = u(:,1);
 h = t(2)-t(1);
-u = u(1:12/h,2);
-y = y(1:12/h,1);
+u = u(:,2);
+y = y(:,1);
 data = iddata(y,u,h); % data file used for grey_est and pem
 %linearization;
 clearvars -except data u y t h Ac Bc x0
 
 %% parameter estimate
 r_p_I = 0.08063;
-d_p_I = 3.685e-05; %3.685e-05
+d_p_I = 1e-05; %3.685e-05
 m_p_I = 0.024;
 g_I = 9.8125; %9.812
 

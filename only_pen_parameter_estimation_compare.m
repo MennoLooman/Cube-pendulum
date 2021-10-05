@@ -9,29 +9,29 @@ A = expm(Ac*h);
 B = h*sys_pem.B;
 
 %% Run first estimation
-load('data/run8.mat');
-t1 = u(1:12/h,1);
-u1 = u(1:12/h,2);
-y1 = y(1:12/h,1);
+load('data/run10_pend.mat');
+t1 = u(:,1);
+u1 = u(:,2);
+y1 = y(:,1);
 [pks1,locs1] = findpeaks(y1,t1);
 x1_hat = zeros(size(y1,1),2);
 y1_hat = zeros(size(y1,1),1);
-x1_hat(locs1(1)/h,:) = [0,pks1(1)];
-for i = locs1(1)/h+1:size(y1,1)
+x1_hat(round(locs1(1)/h),:) = [0,pks1(1)];
+for i = round(locs1(1)/h) + 1:size(y1,1)
     x1_hat(i,:) = A * x1_hat(i-1,:)' + B * u1(i-1)';
     y1_hat(i,:) = x1_hat(i,2);
 end
 vaf1 = VAF(y1(locs1(1)/h:end),y1_hat(locs1(1)/h:end));
 %% Run second validation
-load('data/run7.mat');
+load('data/run9_pend.mat');
 t2 = u(:,1);
 u2 = u(:,2);
 y2 = y(:,1);
 [pks2,locs2] = findpeaks(y2,t2);
 x2_hat = zeros(size(y2,1),2);
 y2_hat = zeros(size(y2,1),1);
-x2_hat(locs2(1)/h,:) = [0,pks2(1)];
-for i = locs2(1)/h+1:size(y2,1)
+x2_hat(round(locs2(1)/h),:) = [0,pks2(1)];
+for i = round(locs2(1)/h) + 1:size(y2,1)
     x2_hat(i,:) = A * x2_hat(i-1,:)' + B * u2(i-1)';
     y2_hat(i,:) = x2_hat(i,2);
 end

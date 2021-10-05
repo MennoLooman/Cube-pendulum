@@ -1,5 +1,5 @@
 %% Load data
-load('data/run8.mat');
+load('data/run8_pend.mat');
 t = u(:,1);
 h = t(2)-t(1);
 u = u(:,2);
