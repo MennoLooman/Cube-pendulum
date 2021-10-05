@@ -10,20 +10,22 @@ clearvars -except data u y t h Ac Bc
 
 %% parameter estimate
 r_m_I = 0.085;
-%r_p_I = 0.08101;%0.129/2;
-d_m_I = 8e-03; %2.059e-3;
-%d_p_I = 1.731e-05;%3.66e-2
+%r_p_I = 0.08101;   %0.129/2;
+d_m_I = 8e-03;      %2.059e-3;
+%d_p_I = 1.731e-05; %3.66e-2
 I_m_I = 4.6e-6;
 %m_p_I = 0.024;
 %g_I = 9.812;
 m_c_I = 5e-3;%0.042/8.4 = 5e-3
 s_m_I = 1;%?
 
+
 %    96,1%
-%    r_p = 0.08101
-%    d_p = 1.731e-05
-%    m_p = 0.024
-%    g = 9.812
+r_p = 0.08101;
+d_p = 1.731e-05;
+m_p = 0.024;d
+g = 9.812;
+
 %% Get linearized system
 %guess physical parameters (stable equi)
 %parameters = {'r_m', r_m_I; 'r_p',r_p_I;'d_m',d_m_I;'I_m',I_m_I;'m_p',m_p_I;'g',g_I;'m_c',m_c_I};
