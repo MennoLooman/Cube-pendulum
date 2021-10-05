@@ -81,7 +81,7 @@ vars = [th1dd al1dd];
 %% Simulation
 %th1e system of Physical equations above will be solved for t, to use the
 %MATLAB solver, the equations must be altered to be in the proper form.
-% MNQF_para = M^-1*NQF;
+ MNQF_para = M^-1*NQF;
 % 
 % % First we must set the parameters
 % m_p_val = 0.024; %kg
