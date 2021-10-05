@@ -60,19 +60,18 @@ function [A,B,C,D] = sys_matrices(r_m,r_p,d_m,I_m,m_p,g,m_c,Ts) %Ts is needed fo
          zeros(2,1)];
     C = [zeros(2) eye(2)];
     D = [0;0];
-%     if Ts>0
-%         Ac = A;
-%         A = expm(Ac*Ts);
-%         B = A\(Ac-eye(4))*B;
-%     end
 end
 
 %added pendulum resistance
 function [A,B,C,D] = sys_matrices2(r_m,d_m,I_m,m_c,Ts) %Ts is needed for greyest
-    A = [(0.024*r_m^2+I_m)/(0.024*0.08101^2)*-1.731e-05/I_m, -r_m/0.08101*(-d_m/I_m), (-(9.812*(0.024*r_m^2 + I_m))/(I_m*0.08101)), 0; 
-         -r_m/0.08101*-1.731e-05/I_m, (-d_m/I_m),    (9.812*0.024*r_m)/I_m, 0;
+    r_p = 0.08063;%0.08101;
+    d_p = 2.904e-05;%1.731e-05;
+    m_p = 0.024;
+    g = 9.813;%9.812;
+    A = [-d_p*(m_p*r_m^2+I_m)/(I_m*m_p*r_p^2) d_m*r_m/(I_m*r_p) -g*(m_p*r_m^2 + I_m)/(I_m*r_p) 0; 
+         r_m*d_p/(I_m*r_p)                    -d_m/I_m          (g*m_p*r_m)/I_m                  0;
          eye(2)      zeros(2)];
-    B = [-r_m/0.08101*m_c/I_m; 
+    B = [-m_c*r_m/(I_m*r_p); 
          m_c/I_m;
          zeros(2,1)];
     C = [zeros(2) eye(2)];
