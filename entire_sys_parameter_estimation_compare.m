@@ -6,7 +6,7 @@ A = expm(Ac*h);
 B = h*Bc;
 
 %% Run first estimation
-load('data/AB/r5_AB_short2.mat');
+load('data/A_only/r1_A_short.mat');
 t1 = u(:,1);
 u1 = u(:,2);
 y1 = y;
@@ -21,7 +21,7 @@ for i = 2:size(y1,1)
 end
 
 %% Run second validation
-load('data/AB/r1_AB_short.mat');
+load('data/A_only/r2_A_short.mat');
 t2 = u(:,1);
 u2 = u(:,2);
 y2 = y;
@@ -43,7 +43,7 @@ hold on;
 plot(t1,y1(:,1), 'DisplayName', 'theta y');
 plot(t1,y1(:,2), 'DisplayName', 'alpha y');
 plot(t1,y1_hat(:,1), 'DisplayName', 'theta y_{est}', 'LineWidth', 1);
-plot(t1,y1_hat(:,2),'--','DisplayName', 'alpha y_est','LineWidth',1);
+plot(t1,y1_hat(:,2),'--','DisplayName', 'alpha y_{est}','LineWidth',1);
 hold off;
 title('run used for estimation');
 legend;
@@ -58,7 +58,7 @@ hold on;
 plot(t2,y2(:,1), 'DisplayName', 'theta y');
 plot(t2,y2(:,2), 'DisplayName', 'alpha y');
 plot(t2,y2_hat(:,1), 'DisplayName', 'theta y_{est}','LineWidth', 1);
-plot(t2,y2_hat(:,2),'--','DisplayName', 'alpha y_est','LineWidth', 1);
+plot(t2,y2_hat(:,2),'--','DisplayName', 'alpha y_{est}','LineWidth', 1);
 hold off;
 title('run used for validation');
 legend;
@@ -86,3 +86,19 @@ function [A,B,C,D] = sys_matrices2() %Ts is needed for greyest
     C = [zeros(2) eye(2)];
     D = [0;0];
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

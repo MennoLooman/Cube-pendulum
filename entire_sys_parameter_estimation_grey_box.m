@@ -1,10 +1,9 @@
 %% Load data
 %load('data/A_only/r3_A_short.mat');
-load('data/AB/r1_AB_short.mat');
+load('data/A_only/r1_A_short.mat');
 t = u(:,1);
 h = t(2)-t(1);
 u = u(:,2);
-y = y;
 data = iddata(y,u,h); % data file used for grey_est and pem
 %linearization;
 clearvars -except data u y t h Ac Bc x0
@@ -86,3 +85,14 @@ function [A,B,C,D] = sys_matrices2(r_m,d_m,I_m,m_c,s_m,Ts) %Ts is needed for gre
     C = [zeros(2) eye(2)];
     D = [0;0];
 end
+
+
+
+
+
+
+
+
+
+
+

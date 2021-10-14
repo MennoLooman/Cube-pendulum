@@ -1,5 +1,5 @@
 %% load 
-EulerLagrange_script;
+entire_sys_EulerLagrange_script;
 clearvars -except MNQF_para th1d al1d th1 al1 voltage
 
 x = [th1d al1d th1 al1];
