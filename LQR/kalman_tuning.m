@@ -66,6 +66,8 @@ else
     [Ac,Bc,Cc,Dc] = sys_matrices_unstable(r_p_v,d_p_v,m_p_v,g_v,r_m_v,d_m_v,I_m_v,m_c_v,s_m_v); %system matrices
 end
 sys_c = ss(Ac,Bc,Cc,Dc); %continuous time system
+G = -Bc*Bc';
+[~,Kc,~] = icare(Ac,[],Q_kal,[],[],[],G); %TODO not working yet
 
 %check observability
 Ob = obsv(Ac,Cc);
@@ -129,7 +131,7 @@ ds = ds.addElement(input_y1,'in1_signal');
 ds = ds.addElement(input_y2,'in2_signal');
 ds = ds.addElement(input_u,'in3_signal');
 
-sim kalman_test
+sim kalman_test_c
 
 x_simulink = x_hat_out.data;
 x_simulink = x_simulink(45:end,:);
@@ -148,6 +150,32 @@ plot(t_new,x_simulink(:,3),'--','DisplayName','x-theta','LineWidth',1.5)
 plot(t_new,x_simulink(:,4),'--','DisplayName','x-alpha','LineWidth',1.5)
 ylim([-0.25 0.25])
 legend
+
+%% plot compare estimates
+figure(20);
+clf
+title("Kalman filter state estimation - compare");
+hold on
+plot(t_new,x_hat(3,:),'-','DisplayName','x-theta-script','LineWidth',1.5)
+plot(t_new,x_hat(4,:),'-','DisplayName','x-alpha-script','LineWidth',1.5)
+plot(t_new,x_simulink(:,3),'--','DisplayName','x-theta-sim','LineWidth',1.5)
+plot(t_new,x_simulink(:,4),'--','DisplayName','x-alpha-sim','LineWidth',1.5)
+ylim([-0.25 0.25])
+legend
+
+disp(['max error x-theta: ', num2str(max(abs(x_simulink(:,3)-x_hat(3,:)'),[],'all'))]);
+disp(['max error x-alpha: ', num2str(max(abs(x_simulink(:,4)-x_hat(4,:)'),[],'all'))]);
+
+figure(21);
+clf
+title("Kalman filter state estimation - abs error");
+hold on
+plot(t_new,x_simulink(:,3)-x_hat(3,:)','-','DisplayName','x-theta-error','LineWidth',1.5)
+plot(t_new,x_simulink(:,4)-x_hat(4,:)','-','DisplayName','x-alpha-error','LineWidth',1.5)
+ylim([-0.25 0.25])
+legend
+%errors both behave like a sine, with same frequentie as pendulum/motor,
+%size of abs error is of same order, looks like very slowly decreasing.
 
 %% functions
 function [A,B,C,D] = sys_matrices_stable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
