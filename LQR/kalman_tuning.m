@@ -33,10 +33,10 @@ else
 end
 %NOISE TERMS
 %state:
-    Q1 = 1;    %theta_d
+    Q1 = 2;    %theta_d
     Q2 = 1;    %alpha_d
-    Q3 = 0.001;    %theta
-    Q4 = 0.01;    %alpha
+    Q3 = 0.0001;    %theta
+    Q4 = 0.001;    %alpha
     Q_kal = diag([Q1,Q2,Q3,Q4]);
 %output:
     R1 = 0.00005;     %theta
@@ -101,23 +101,29 @@ end
 %% plot estimates
 figure(11);
 clf
+subplot(2,1,1)
 title("Kalman filter state estimation - via written script");
 hold on
 % plot outputs
 plot(t_new,y_new(:,1),'DisplayName','y-theta','LineWidth',1.5)
 plot(t_new,y_new(:,2),'DisplayName','y-alpha','LineWidth',1.5)
-%plot(t,x_hat(1,:),'--','DisplayName','x-theta_d','LineWidth',1.5)
-%plot(t,x_hat(2,:),'--','DisplayName','x-alpha_d','LineWidth',1.5)
 plot(t_new,x_hat(3,:),'--','DisplayName','x-theta','LineWidth',1.5)
 plot(t_new,x_hat(4,:),'--','DisplayName','x-alpha','LineWidth',1.5)
 ylim([-0.25 0.25])
 legend
 
+subplot(2,1,2)
+title("derivatives")
+hold on
+plot(t_new,x_hat(1,:),'--','DisplayName','x-theta_d','LineWidth',1.5)
+plot(t_new,x_hat(2,:),'--','DisplayName','x-alpha_d','LineWidth',1.5)
+legend;
+
 %% plot u
 %figure(12);
 %plot(t_new,u_new)
 
-
+%{
 %% Simulate using Simulink
 Tsim = t_new(end);
 input_y1 = timeseries(y_new(:,1),t_new);
@@ -148,7 +154,7 @@ plot(t_new,x_simulink(:,3),'--','DisplayName','x-theta','LineWidth',1.5)
 plot(t_new,x_simulink(:,4),'--','DisplayName','x-alpha','LineWidth',1.5)
 ylim([-0.25 0.25])
 legend
-
+%}
 %% functions
 function [A,B,C,D] = sys_matrices_stable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
     A = [-d_p*(m_p*r_m^2+I_m)/(I_m*m_p*r_p^2) d_m*r_m/(I_m*r_p) -g*(m_p*r_m^2 + I_m)/(I_m*r_p) (r_m*s_m)/(I_m*r_p); 
