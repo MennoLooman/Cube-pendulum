@@ -1,19 +1,32 @@
-clear,clc
 %% settings
 h = 0.02; %based on rise time of pendulum swing (also used during estimation, but could now independently altered here.
-stable_equi = 1; %[0 unstable / 1 stable]
+% stable_equi = 1; %[0 unstable / 1 stable]
+simulate_LQR = 1; %[0 run / 1 simulate]
 
 %COST TERMS
-%states:
-    Q1=1; %theta_d
-    Q2=1; %alpha_d
-    Q3=1; %theta
-    Q4=1; %alpha
-    Q_lqr = diag([Q1,Q2,Q3,Q4]);
-%input
-    R_lqr = 1;
-%cross-terms
-N_lqr = zeros(size(Q_lqr,1),size(R_lqr,2));
+if(stable_equi)
+    %states:
+        Q1=1e1; %theta_d
+        Q2=1e1; %alpha_d
+        Q3=1e0; %theta
+        Q4=1e3; %alpha
+        Q_lqr = diag([Q1,Q2,Q3,Q4]);
+    %input
+        R_lqr = 1e2;
+    %cross-terms
+        N_lqr = zeros(size(Q_lqr,1),size(R_lqr,2));
+else %unstable
+    %states:
+        Q1=1e0; %theta_d
+        Q2=1e0; %alpha_d
+        Q3=1e0; %theta
+        Q4=1e0; %alpha
+        Q_lqr = diag([Q1,Q2,Q3,Q4]);
+    %input
+        R_lqr = 1e0;
+    %cross-terms
+        N_lqr = zeros(size(Q_lqr,1),size(R_lqr,2));
+end
 
 %% get system matrices and kalm-filter observer
 addpath '..\observer'
@@ -32,6 +45,7 @@ end
 [K_lqr,~,~] = dlqr(Ad,Bd,Q_lqr,R_lqr,N_lqr);
 
 %% simulate the response of the controlled system:
+if(simulate_LQR)
 sim_len = 5;            %seconds
 sim_x0 = [0;0;0;pi/32]; %initial conditions 
 %[theta_d,alpha_d,theta,alpha]
@@ -182,7 +196,7 @@ xlabel("time (s)");
 
 
 
-
+end
 
 
 

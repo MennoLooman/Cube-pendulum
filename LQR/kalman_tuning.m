@@ -1,5 +1,15 @@
-%% Observer Parameters
-%needs a value, but if ran from another script, don't overwrite.
+%clearvars -except u y t
+clc
+plot_figure = 1;
+
+% u_save = u;
+% y_save = y;
+t_save = t;
+u_new = u_save(5/h+1:end,1);
+y_new = y_save(5/h+1:end,:);
+t_new = t_save(5/h+1:end,1);
+
+%% from kalman script
 if ~exist('h','var')
     h = 0.02; 
 end
@@ -71,16 +81,13 @@ Dd = sys_d.D;
 Kd = Kd';
 
 %% using observer to estimate states (not live in simulink)
-load('../data/AB_new/AB_new6_long.mat');
-t = u(:,1);
-u = u(:,2);
-
-x_hat = zeros(size(Ad,1),size(y,1));
-y_hat = zeros(size(Cd,1),size(y,1));
+x0 = zeros(4,1);
+x_hat = zeros(size(Ad,1),size(y_new,1));
+y_hat = zeros(size(Cd,1),size(y_new,1));
 x_hat(:,1) = x0';
 
-for k=1:size(y,1)-1
-    x_hat(:,k+1) = (Ad - Kd*Cd)*x_hat(:,k) + Bd*u(k) + Kd*y(k,:)';
+for k=1:size(y_new,1)-1
+    x_hat(:,k+1) = (Ad - Kd*Cd)*x_hat(:,k) + Bd*u_new(k) + Kd*y_new(k,:)';
     y_hat(:,k) = Cd*x_hat(:,k);
 end
 
@@ -93,17 +100,20 @@ if plot_figure
     clf
     title("Kalman filter on test-run outputs");
     hold on
-    plot(t,x_hat(1,:),'DisplayName','x-theta_d')
-    plot(t,x_hat(2,:),'DisplayName','x-alpha_d')
-    plot(t,x_hat(3,:),'DisplayName','x-theta')
-    plot(t,x_hat(4,:),'DisplayName','x-alpha')
+    plot(t_new,y_new(:,1),'DisplayName','y-theta')
+    plot(t_new,y_new(:,2),'DisplayName','y-alpha')
+%     plot(t,x_hat(1,:),'DisplayName','x-theta_d')
+%     plot(t,x_hat(2,:),'DisplayName','x-alpha_d')
+    plot(t_new,x_hat(3,:),'DisplayName','x-theta')
+    plot(t_new,x_hat(4,:),'DisplayName','x-alpha')
     % plot outputs
-    plot(t,y(:,1),'DisplayName','y-theta')
-    plot(t,y(:,2),'DisplayName','y-alpha')
     legend
-    ylim([-0.3,0.5])
+    xlim([4.8,6.4])
 end
-        
+%% plot u
+figure(12);
+plot(t_new,u_new)
+
 %% functions
 function [A,B,C,D] = sys_matrices_stable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
     A = [-d_p*(m_p*r_m^2+I_m)/(I_m*m_p*r_p^2) d_m*r_m/(I_m*r_p) -g*(m_p*r_m^2 + I_m)/(I_m*r_p) (r_m*s_m)/(I_m*r_p); 
@@ -126,19 +136,3 @@ function [A,B,C,D] = sys_matrices_unstable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
     C = [zeros(2) eye(2)];
     D = [0;0];
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
