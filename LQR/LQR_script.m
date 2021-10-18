@@ -4,6 +4,9 @@ h = 0.02; %based on rise time of pendulum swing (also used during estimation, bu
 simulate_LQR = 1; %[0 run / 1 simulate]
 
 %COST TERMS
+if ~exist('stable_equi','var')
+    stable_equi = 0;
+end
 if(stable_equi)
     %states:
         Q1=1e1; %theta_d

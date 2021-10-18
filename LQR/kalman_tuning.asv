@@ -1,7 +1,7 @@
 %clearvars -except u y t
 clc
 plot_figure = 1;
-load('../data/AB_new/AB_new2_short2.mat');
+load('../data/A_only/r1_A_short.mat');
 %{
 when you have data from an actual run:
 % u_save = u;
@@ -12,9 +12,9 @@ y_new = y_save(5/h+1:end,:);
 t_new = t_save(5/h+1:end,1);
 %}
 
-t_new = u(:,1);
 u_new = u(:,2);
 y_new = y;
+t_new = 
 
 %% from kalman script
 if ~exist('h','var')
@@ -99,55 +99,27 @@ for k=1:size(y_new,1)-1
 end
 
 %% plot estimates
-figure(11);
-clf
-title("Kalman filter state estimation - via written script");
-hold on
-% plot outputs
-plot(t_new,y_new(:,1),'DisplayName','y-theta','LineWidth',1.5)
-plot(t_new,y_new(:,2),'DisplayName','y-alpha','LineWidth',1.5)
-%plot(t,x_hat(1,:),'--','DisplayName','x-theta_d','LineWidth',1.5)
-%plot(t,x_hat(2,:),'--','DisplayName','x-alpha_d','LineWidth',1.5)
-plot(t_new,x_hat(3,:),'--','DisplayName','x-theta','LineWidth',1.5)
-plot(t_new,x_hat(4,:),'--','DisplayName','x-alpha','LineWidth',1.5)
-ylim([-0.25 0.25])
-legend
-
+if ~exist('plot_figure','var')
+    plot_figure = 1;
+end
+if plot_figure
+    figure(11);
+    clf
+    title("Kalman filter on test-run outputs");
+    hold on
+    plot(t_new,y_new(:,1),'DisplayName','y-theta')
+    plot(t_new,y_new(:,2),'DisplayName','y-alpha')
+%     plot(t,x_hat(1,:),'DisplayName','x-theta_d')
+%     plot(t,x_hat(2,:),'DisplayName','x-alpha_d')
+    plot(t_new,x_hat(3,:),'DisplayName','x-theta')
+    plot(t_new,x_hat(4,:),'DisplayName','x-alpha')
+    % plot outputs
+    legend
+    xlim([4.8,6.4])
+end
 %% plot u
-%figure(12);
-%plot(t_new,u_new)
-
-
-%% Simulate using Simulink
-Tsim = t_new(end);
-input_y1 = timeseries(y_new(:,1),t_new);
-input_y2 = timeseries(y_new(:,2),t_new);
-input_u =  timeseries(u_new,t_new);
-
-ds = Simulink.SimulationData.Dataset;
-ds = ds.addElement(input_y1,'in1_signal');
-ds = ds.addElement(input_y2,'in2_signal');
-ds = ds.addElement(input_u,'in3_signal');
-
-sim kalman_test
-
-x_simulink = x_hat_out.data;
-x_simulink = x_simulink(45:end,:);
-
-%% plot simulink kalman results
 figure(12);
-clf
-title("Kalman filter state estimation - via simulink");
-hold on
-% plot outputs
-plot(t_new,y_new(:,1),'DisplayName','y-theta','LineWidth',1.5)
-plot(t_new,y_new(:,2),'DisplayName','y-alpha','LineWidth',1.5)
-%plot(t,x_simulink(:,1),'--','DisplayName','x-theta_d','LineWidth',1.5)
-%plot(t,x_simulink(:,2),'--','DisplayName','x-alpha_d','LineWidth',1.5)
-plot(t_new,x_simulink(:,3),'--','DisplayName','x-theta','LineWidth',1.5)
-plot(t_new,x_simulink(:,4),'--','DisplayName','x-alpha','LineWidth',1.5)
-ylim([-0.25 0.25])
-legend
+plot(t_new,u_new)
 
 %% functions
 function [A,B,C,D] = sys_matrices_stable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
@@ -171,33 +143,3 @@ function [A,B,C,D] = sys_matrices_unstable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
     C = [zeros(2) eye(2)];
     D = [0;0];
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
