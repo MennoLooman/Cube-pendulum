@@ -20,7 +20,21 @@ assume(damp_motor, 'real');
 assume(damp_pendulum, 'real');
 
 %% Energy bal1ance
-% cartesian
+%{
+Old (polar)
+K = (1/2)*I_p*th1d^2 + ...                              %pendulum theta
+    (1/2)*m_p*(r_m^2 + (sin(th1)*r_p)^2)*al1d^2 + ...   %pendulum alpha
+    (1/2)*I_m*al1d^2;                                   %motor alpha
+P = r_p*m_p*g*(1-cos(th1));
+%}
+%{
+conference paper (cartesian)
+K = (1/2)*I_m*th1d^2 + ...                              %pendulum theta
+    (1/2)*m_p*((r_p*th1d-r_m*cos(al1)*al1d)^2 + (-r_m*sin(al1)*al1d)^2  + (r_m*cos(al1)^2*al1d^2)^2  ) + ...   %pendulum alpha
+    (1/2)*I_p*al1d^2;                                   %motor alpha
+P = r_p*m_p*g*(cos(al1));
+%}
+%new cartesian
 Vx = (-cos(al1)*r_m + sin(al1)*r_p*sin(th1))*al1d -cos(al1)*r_p*cos(th1)*th1d;
 Vy = ( sin(al1)*r_m + cos(al1)*r_p*sin(th1))*al1d +sin(al1)*r_p*cos(th1)*th1d;
 Vz = sin(th1)*r_p*th1d;
@@ -65,53 +79,13 @@ eqns = [L1th1 - L2th1 == -Dth1 + Fth1
         L1al1 - L2al1 == -Dal1 + Fal1];
 vars = [th1dd al1dd];
 [M, NQF] = equationsToMatrix(eqns,vars);
-
-%% Simulation
-%th1e system of Physical equations above will be solved for t, to use the
-%MATLAB solver, the equations must be altered to be in the proper form.
 MNQF_para = M^-1*NQF;
-% 
-% % First we must set the parameters
-m_p_val = 0.024; %kg
-r_p_val = 0.129/2; %kg
-r_m_val = 0.085; %m
-I_p_val = (1/3)*m_p_val*(r_p_val*2)^2; %kg*m^2 %Wordt niet gebruikt in equations.
-I_m_val = 1.0*10^-3; %kg*m^2 ??????
-g_val = 9.81; %m/s^2
-motor_constant_val = 1; %Kr/R
-damp_motor_val = 0.01; %random guess
-% 
-% %function for evaluating:
-MNQF = matlabFunction(subs(MNQF_para,{m_p r_p r_m I_m g motor_constant damp_motor voltage}, {m_p_val r_p_val r_m_val I_m_val g_val motor_constant_val damp_motor_val 0} )); 
-% 
-% x0 = [pi+0.00001, 0, 0, 0]; %initial conditions %[theta alpha theta_d alpha_d]
-% t_s = 0.001;  %time step
-% t_end = 3;  %time end
-% t_v = 0:t_s:t_end;
-% x = zeros(t_end/t_s+1,4); %
-% x(1,:) = x0;
-% 
-% %loop
-% for i = 1:t_end/t_s 
-%     x(i+1,1) = x(i,3)*t_s + x(i,1);
-%     x(i+1,2) = x(i,4)*t_s + x(i,2);
-%     x(i+1,3) = [1 0]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,3);
-%     x(i+1,4) = [0 1]*MNQF(x(i,4),x(i,1),x(i,3))*t_s + x(i,4);
-% end
-% 
-% figure()
-% clf
-% hold on
-% plot(t_v,x(:,1),'m')
-% plot(t_v,x(:,2),'b')
-% plot(t_v,x(:,3),'r')
-% plot(t_v,x(:,4),'g')
-% 
-% %ylim([-50 40])
-% xlim([0 t_end])
-% legend("theta","alpha","theta_d","alpha_d")
 
-%% Functions
+% %function for evaluating:
+substitute_this =   {I_m,   damp_motor, damp_pendulum,  g,      m_p,    motor_constant, r_m,    r_p,    s_m};
+for_this =          {I_m_v, d_m_v,      d_p_v,          g_v,    m_p_v,  m_c_v,          r_m_v,  r_p_v,  s_m_v};
+MNQF = matlabFunction(subs(MNQF_para,substitute_this,for_this));
+
 function res = dt(input)
     %Function to get time derivative. Accepts only if equation does not
     %contain states higher than double dot (this should never be needed for
@@ -123,5 +97,14 @@ function res = dt(input)
     end
     res = diff(input,th1)*th1d + diff(input,al1)*al1d + diff(input,th1d)*th1dd + diff(input,al1d)*al1dd;
 end
+
+
+
+
+
+
+
+
+
 
 

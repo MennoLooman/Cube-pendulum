@@ -4,7 +4,7 @@ clearvars -except MNQF_para th1d al1d th1 al1 voltage
 
 x = [th1d al1d th1 al1];
 x_d = [MNQF_para',th1d,al1d]; %dynamics
-stable_equi = 1;  %[0 unstable / 1 stable]
+stable_equi = 0;  %[0 unstable / 1 stable]
 
 %% linearize around: 
 %stable equilibrium:

@@ -1,8 +1,8 @@
 clear,clc
-load('AB_new9.mat');
+load('AB_new1.mat');
 h = 0.02;
 new_t_beg = 0.9;
-new_t_end = 2.5;
+new_t_end = 4.9;
 
 t1 = u(:,1);
 u1 = u(:,2);
@@ -31,4 +31,4 @@ y = y_new;
 
 clearvars -except u y x0
 
-save('AB_new9_short2.mat','u','y','x0')
+save('AB_new1_long.mat','u','y','x0')

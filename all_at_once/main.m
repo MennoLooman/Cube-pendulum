@@ -1,7 +1,4 @@
 clear,clc
-%% run some needed scripts
-%entire_sys_linearization;
-
 %% Alter settings from here
 % @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 %% Choose runs
