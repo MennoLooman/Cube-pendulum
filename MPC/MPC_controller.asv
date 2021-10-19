@@ -1,0 +1,18 @@
+%input: state x(1) output: u(1)... u(Horizon_C)
+%given parameter: Horizon_P Horizon_C Ad Bd Cd Dd P Q R alpha_bound
+%calculate Horizon_P ahead, objective: 1\2 x(N+1)' P x(N+1) + ...
+%                        sum k=1^N 1\2 x(k)' Q x(k) + 1/2 u(k)' R u(k)
+% such that constraints....
+% opti vector xu = [x(1) x(2) ... x(Horizon_P+1) u(1) u(2) ... u(Horizon_P)]'
+
+%sys behaviour
+Aeq = [[eye(4*(Horizon_P+1)) + kron(diag(ones(1,Horizon_P),-1),-Ad)] [zeros(4,Horizon_P); kron(eye(Horizon_P),-Bd)]];
+beq = [x0; zeros(4*Horizon_P,1)]; 
+
+Aleq = [[zeros(2*Horizon_P,4*(Horizon_P+1)) kron(eye(Horizon_P),[1;-1])];
+        [zeros(2*Horizon_P,4) kron(eye(Horizon_P),[0 0 0 1; 0 0 0 -1]) zeros(2*Horizon_P,Horizon_P)]];
+bleq = [ones(2*Horizon_P,1); alpha_bound*ones(2*Horizon_P,1)];
+
+Objective = 
+
+xu = quadprog(Objective,[],Aleq,bleq,Aeq,beq)
