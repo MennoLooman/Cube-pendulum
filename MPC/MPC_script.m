@@ -1,6 +1,6 @@
 %% settings
 if ~exist('h','var')
-    h = 0.01; %based on rise time of pendulum swing (also used during estimation, but could now independently altered here.
+    h = 0.005; %based on rise time of pendulum swing (also used during estimation, but could now independently altered here.
 end
 
 if ~exist('stable_equi','var')
@@ -12,16 +12,16 @@ if(stable_equi)
     %settings stable equi
     Horizon_P = 2; %prediction horizon
     Horizon_C = 1; %controller horizon
-    Q = diag([1e0 1e0 1e0 1e0]); %Q tuning states 4x4
-    R = 1e0; %R tuning input 1x1
+    Q = diag([1e6 5e4 1e8 5e6]); %Q tuning states 4x4
+    R = 1e-10; %R tuning input 1x1
     beta = 1; %weight on terminal cost
     alpha_bound = 1.4; %upper and lower bound for alpha
 else
     %settings unstable equi
     Horizon_P = 3; %prediction horizon
     Horizon_C = 1; %controller horizon
-    Q = diag([1e0 1e0 1e0 1e0]); %Q tuning states 4x4
-    R = 1e0; %R tuning input 1x1
+    Q = diag([1e6 5e4 1e8 5e6]); %Q tuning states 4x4
+    R = 1e-10; %R tuning input 1x1
     beta = 1; %weight on terminal cost
     alpha_bound = 1.4; %upper and lower bound for alpha
 end

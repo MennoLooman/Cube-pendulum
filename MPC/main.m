@@ -3,9 +3,7 @@
 % outputs to a variable in the Workspace for further processing.
 
 clear;clc;
-addpath('..');
 hwinit;
-simulate_LQR = 0; %[0 run / 1 simulate]
 stable_equi = 0; %[0 unstable / 1 stable]
 MPC_script;
 
@@ -33,10 +31,8 @@ ds = ds.addElement(reference_signal,'reference');
 disp("Running Simulation Now");
 sim qubetemplate_kalman_and_LQR_2020b
 
-
 %% Collect output data
 % (make sure that samples are taken every 'h' seconds! in 'To Workspace' block)
-
 y = y_out.data;
 u = u_out.data;
 x_hat = x_hat_out.data;
