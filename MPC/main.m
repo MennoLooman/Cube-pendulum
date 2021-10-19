@@ -4,8 +4,6 @@
 
 clear;clc;
 hwinit;
-stable_equi = 0; %[0 unstable / 1 stable]
-MPC_script;
 
 % Sample rate in sec.
 h = 0.005;
@@ -17,6 +15,10 @@ Tsim = 20;
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
 N = Tsim/h; %N+1 samples
+
+%MPC
+stable_equi = 1; %[0 unstable / 1 stable]
+MPC_script;
 
 %% Start experiment
 % load reference

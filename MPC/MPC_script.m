@@ -10,11 +10,11 @@ end
 %tuning
 if(stable_equi)
     %settings stable equi
-    Horizon_P = 2; %prediction horizon
-    Horizon_C = 1; %controller horizon
+    Horizon_P = 20; %prediction horizon
+    Horizon_C = 3; %controller horizon
     Q = diag([1e6 5e4 1e8 5e6]); %Q tuning states 4x4
     R = 1e-10; %R tuning input 1x1
-    beta = 1; %weight on terminal cost
+    beta = 1; %weight on terminal cost (final state)
     alpha_bound = 1.4; %upper and lower bound for alpha
 else
     %settings unstable equi
@@ -59,3 +59,10 @@ bleq = [ones(2*Horizon_P,1); alpha_bound*ones(2*Horizon_P,1)];
 
 %Objective function 
 Objective_H = blkdiag(kron(eye(Horizon_P),Q) ,P, kron(eye(Horizon_P),R));
+
+x0 = [0;0;pi/16;0];
+%% delete tomorrow
+MPC_controller;
+for i = 1:length(u)
+    x0 = Ad*x0 + Bd * u(i);
+end

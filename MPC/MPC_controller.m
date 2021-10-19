@@ -1,4 +1,3 @@
-function u = MPC_controller(x0)
 %input: state x(1) output: u(1)... u(Horizon_C)
 %given parameter: Horizon_P Horizon_C Ad Bd Cd Dd P Q R alpha_bound
 %calculate Horizon_P ahead, objective: 1\2 x(N+1)' P x(N+1) + ...
@@ -10,7 +9,9 @@ function u = MPC_controller(x0)
 beq = [x0; zeros(4*Horizon_P,1)]; 
 
 %optie process
-xu = quadprog(Objective_H,[],Aleq,bleq,Aeq,beq);
+xu = quadprog(Objective_H,zeros(length(Objective_H),1),Aleq,bleq,Aeq,beq);
 
 %results
 u = xu(4*(Horizon_P+1)+1:4*(Horizon_P+1)+Horizon_C);
+
+disp(u);
