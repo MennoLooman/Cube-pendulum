@@ -2,7 +2,7 @@
 % specifying a fixed input signal and recording the measured
 % outputs to a variable in the Workspace for further processing.
 
-close all;clear;clc;
+clear;clc;
 addpath('..');
 hwinit;
 simulate_LQR = 0; %[0 run / 1 simulate]
@@ -11,11 +11,11 @@ simulate_LQR = 0;
 LQR_script;
 
 % Sample rate in sec.
-h = 0.02;
+h = 0.01;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 10;
+Tsim = 20;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
@@ -37,6 +37,7 @@ simin = [t, u, input_V];
 
 %% Start experiment
 % sim qubetemplate_with_kalman_blocks_2020b
+disp("Running Simulation Now");
 sim qubetemplate_kalman_and_LQR_2020b
 
 
@@ -49,23 +50,24 @@ u = u_out.data;
 x_hat = x_hat_out.data;
 
 %% Plot data
-figure();
-plot(t, y(:,1), t, y(:,2))
-legend('theta', 'alpha')
 
-figure();
+figure(2);
 plot(t, x_hat(:,1), t,x_hat(:,2), t,x_hat(:,3) ,t,x_hat(:,4))
-legend('theta_d_hat', 'alpha_d_hat', 'theta_hat', 'alpha_hat');
+legend('theta_d-hat', 'alpha_d-hat', 'theta-hat', 'alpha-hat');
+xlim([4.8,10])
 
-figure();
+figure(3);
+clf
+hold on
+plot(t, y(:,1), t, y(:,2))
 plot(t,u)
-legend('u')
-xlim([4.8,6.2])
+legend('theta', 'alpha','u')
+xlim([4.8,10])
 ylim([-1.5 1.5])
 
-figure();
+figure(4);
 plot(t,y(:,1), t, y(:,2),t,x_hat(:,3) ,t,x_hat(:,4))
 legend('theta', 'alpha','theta_h_a_t', 'alpha_h_a_t');
-xlim([4.8,6.2])
+xlim([4.8,10])
 %% Save data
 % save('data/AB/r5_AB.mat','u','y')

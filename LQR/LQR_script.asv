@@ -23,7 +23,7 @@ if(stable_equi)
         N_lqr = zeros(size(Q_lqr,1),size(R_lqr,2));
 else %unstable
     %states:
-        Q1=1e6; %theta_d
+        Q1=1e7; %theta_d
         Q2=1e0; %alpha_d
         Q3=1e8; %theta
         Q4=1e6; %alpha
