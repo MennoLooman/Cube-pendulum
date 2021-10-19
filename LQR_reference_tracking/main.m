@@ -6,7 +6,7 @@ clear;clc;
 addpath('..');
 hwinit;
 simulate_LQR = 0; %[0 run / 1 simulate]
-stable_equi = 1; %[0 unstable / 1 stable]
+stable_equi = 0; %[0 unstable / 1 stable]
 simulate_LQR = 0;
 LQR_script;
 
@@ -37,11 +37,11 @@ N = Tsim/h; %N+1 samples
 
 %% Start experiment
 % build reference signal
-amplitude_ref = 0.8;
+amplitude_ref = 0.3;
 omega_ref = 0.5;
 reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(5/h,1)]*amplitude_ref; %block signal
 reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
-reference_signal = timeseries(reference2,t);
+reference_signal = timeseries(reference1,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;

@@ -4,7 +4,7 @@ if ~exist('h','var')
 end
 
 % stable_equi = 1; %[0 unstable / 1 stable]
-simulate_LQR = 0; %[0 run / 1 simulate]
+%simulate_LQR = 0; %[0 run / 1 simulate]
 
 %COST TERMS
 if ~exist('stable_equi','var')
@@ -24,9 +24,9 @@ if(stable_equi)
 else %unstable
     %states:
         Q1=1e6; %theta_d
-        Q2=1e4; %alpha_d
+        Q2=5e4; %alpha_d
         Q3=1e8; %theta
-        Q4=1e6; %alpha
+        Q4=5e6; %alpha
         Q_lqr = diag([Q1,Q2,Q3,Q4]);
     %input
         R_lqr = 1e-10;
