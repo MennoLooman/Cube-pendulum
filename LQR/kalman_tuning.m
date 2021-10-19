@@ -125,7 +125,7 @@ legend;
 %figure(12);
 %plot(t_new,u_new)
 
-%{
+
 %% Simulate using Simulink
 Tsim = t_new(end);
 input_y1 = timeseries(y_new(:,1),t_new);
@@ -156,9 +156,7 @@ plot(t_new,x_simulink(:,3),'--','DisplayName','x-theta','LineWidth',1.5)
 plot(t_new,x_simulink(:,4),'--','DisplayName','x-alpha','LineWidth',1.5)
 ylim([-0.25 0.25])
 legend
-<<<<<<< HEAD
-%}
-=======
+
 
 %% plot compare estimates
 figure(20);
@@ -186,7 +184,6 @@ legend
 %errors both behave like a sine, with same frequentie as pendulum/motor,
 %size of abs error is of same order, looks like very slowly decreasing.
 
->>>>>>> f12df2c00290e51622c01f1729a3daa38ff47390
 %% functions
 function [A,B,C,D] = sys_matrices_stable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
     A = [-d_p*(m_p*r_m^2+I_m)/(I_m*m_p*r_p^2) d_m*r_m/(I_m*r_p) -g*(m_p*r_m^2 + I_m)/(I_m*r_p) (r_m*s_m)/(I_m*r_p); 
