@@ -9,7 +9,7 @@ h = 0.02;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 5;
+Tsim = 10;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
@@ -20,8 +20,8 @@ amplitude = 0.017;%0.02;
 omega = 5;
 %u = ([10*h:h/Tsim:1+10*h]'+0.1) .* sin([10*h:h/Tsim*20:20+10*h]' .* t) * amplitude;
 %u = ones(size(t))*amplitude;
-%u = zeros(size(t));
-u = [zeros(1/h,1); sin(20 * (h:h:N/5*h))' ; zeros((Tsim/h - (N/5) - 50)+1,1)] * amplitude;
+u = zeros(size(t));
+%u = [zeros(1/h,1); sin(20 * (h:h:N/5*h))' ; zeros((Tsim/h - (N/5) - 50)+1,1)] * amplitude;
 % u = [zeros(N/10+1,1); 
 %     0.5*sin(4 * (h:h:N/5*h))'; 
 %     0.6*sin(8 * (h:h:N/5*h))'; 
@@ -43,7 +43,7 @@ ds = ds.addElement(input_V,'in1_signal');
 simin = [t, u, input_V];
 
 %% Start experiment
-sim qubetemplate_altered
+sim qubetemplate
 
 
 %% Collect output data

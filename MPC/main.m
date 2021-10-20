@@ -17,7 +17,7 @@ t = [0:h:Tsim]';
 N = Tsim/h; %N+1 samples
 
 %MPC
-stable_equi = 1; %[0 unstable / 1 stable]
+stable_equi = 0; %[0 unstable / 1 stable]
 MPC_script;
 
 %% Start experiment
@@ -31,7 +31,7 @@ ds = ds.addElement(reference_signal,'reference');
 
 % sim qubetemplate_with_kalman_blocks_2020b
 disp("Running Simulation Now");
-sim qubetemplate_kalman_and_LQR_2020b
+sim qubetemplate_kalman_and_MPC_2020b
 
 %% Collect output data
 % (make sure that samples are taken every 'h' seconds! in 'To Workspace' block)
