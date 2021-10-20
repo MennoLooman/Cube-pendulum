@@ -41,6 +41,8 @@ I_m_v = 0.0002036;
 m_c_v = 0.21872; 
 s_m_v = 0.0025753;
 
+x0 = [0;0;0;0];
+
 %% getting state matrices
 %system matrices depend on what operating point we linearize about.
 if stable_equi == 1
@@ -71,24 +73,26 @@ Dd = sys_d.D;
 Kd = Kd';
 
 %% using observer to estimate states (not live in simulink)
-load('../data/AB_new/AB_new6_long.mat');
-t = u(:,1);
-u = u(:,2);
-
-x_hat = zeros(size(Ad,1),size(y,1));
-y_hat = zeros(size(Cd,1),size(y,1));
-x_hat(:,1) = x0';
-
-for k=1:size(y,1)-1
-    x_hat(:,k+1) = (Ad - Kd*Cd)*x_hat(:,k) + Bd*u(k) + Kd*y(k,:)';
-    y_hat(:,k) = Cd*x_hat(:,k);
-end
-
 %% plot estimates
 if ~exist('plot_figure','var')
     plot_figure = 1;
 end
 if plot_figure
+    
+    load('../data/AB_new/AB_new6_long.mat');
+    t = u(:,1);
+    u = u(:,2);
+
+    x_hat = zeros(size(Ad,1),size(y,1));
+    y_hat = zeros(size(Cd,1),size(y,1));
+    x_hat(:,1) = x0';
+
+    for k=1:size(y,1)-1
+        x_hat(:,k+1) = (Ad - Kd*Cd)*x_hat(:,k) + Bd*u(k) + Kd*y(k,:)';
+        y_hat(:,k) = Cd*x_hat(:,k);
+    end
+
+
     figure(11);
     clf
     title("Kalman filter on test-run outputs");
@@ -126,19 +130,3 @@ function [A,B,C,D] = sys_matrices_unstable(r_p,d_p,m_p,g,r_m,d_m,I_m,m_c,s_m)
     C = [zeros(2) eye(2)];
     D = [0;0];
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -10,7 +10,7 @@ h = 0.005;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 20;
+Tsim = 30;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
@@ -22,8 +22,12 @@ MPC_script;
 
 %% Start experiment
 % load reference
+amplitude_ref = 0.5;
+omega_ref = 2;
 reference = zeros(N+1,1);
-reference_signal = timeseries(reference,t);
+reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(15/h,1)]*amplitude_ref; %block signal
+reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
+reference_signal = timeseries(reference1,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;
@@ -31,10 +35,30 @@ ds = ds.addElement(reference_signal,'reference');
 
 % sim qubetemplate_with_kalman_blocks_2020b
 disp("Running Simulation Now");
-sim qubetemplate_kalman_and_LQR_2020b
+sim qubetemplate_kalman_and_MPC_2020b
 
 %% Collect output data
 % (make sure that samples are taken every 'h' seconds! in 'To Workspace' block)
 y = y_out.data;
 u = u_out.data;
 x_hat = x_hat_out.data;
+
+%% plot
+figure();
+clf
+hold on
+%yyaxis left
+ylabel('Measurements [rad]');
+plot(t, y(:,1),'LineWidth',2);
+plot(t, y(:,2),'LineWidth',2);
+plot(t,reference_signal.data,'LineWidth',2);
+xlim([6.0,Tsim])
+ylim([-1.1,1.1])
+yyaxis right
+plot(t,u,'-','LineWidth',2)
+legend('theta', 'alpha','reference - alpha','u','Location','southwest');%,'northeast');%
+xlim([6.0,Tsim])
+ylim([-1.1,1.1])
+xlabel('time [t]');
+ylabel('Input voltage u [V]');
+title('Reference tracking MPCI step function around stable equilibrium');

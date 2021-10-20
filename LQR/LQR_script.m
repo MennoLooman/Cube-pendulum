@@ -12,13 +12,13 @@ if ~exist('stable_equi','var')
 end
 if(stable_equi)
     %states:
-        Q1=1e6; %theta_d
+        Q1=1e5; %theta_d
         Q2=1e-3; %alpha_d
         Q3=1e6; %theta
         Q4=1e6; %alpha
         Q_lqr = diag([Q1,Q2,Q3,Q4]);
     %input
-        R_lqr = 1e-2;
+        R_lqr = 1e-10;
     %cross-terms
         N_lqr = zeros(size(Q_lqr,1),size(R_lqr,2));
 else %unstable
