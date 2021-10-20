@@ -3,10 +3,9 @@
 % outputs to a variable in the Workspace for further processing.
 
 clear;clc;
-addpath('..');
 hwinit;
 simulate_LQR = 0; %[0 run / 1 simulate]
-stable_equi = 0; %[0 unstable / 1 stable]
+stable_equi = 1; %[0 unstable / 1 stable]
 simulate_LQR = 0;
 LQR_script;
 

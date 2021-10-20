@@ -3,11 +3,9 @@
 % outputs to a variable in the Workspace for further processing.
 
 clear;clc;
-addpath('..');
 hwinit;
 simulate_LQR = 0; %[0 run / 1 simulate]
-stable_equi = 0; %[0 unstable / 1 stable]
-simulate_LQR = 0;
+stable_equi = 1; %[0 unstable / 1 stable]
 LQR_script;
 
 % Sample rate in sec.
@@ -37,11 +35,12 @@ N = Tsim/h; %N+1 samples
 
 %% Start experiment
 % build reference signal
-amplitude_ref = 0.3;
-omega_ref = 0.5;
+amplitude_ref = 0.8;%0.3;
+omega_ref = 0.5;%0.5;
+reference = zeros(N+1,1);
 reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(5/h,1)]*amplitude_ref; %block signal
 reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
-reference_signal = timeseries(reference1,t);
+reference_signal = timeseries(reference,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;
@@ -69,11 +68,21 @@ xlim([4.8,Tsim])
 figure(2);
 clf
 hold on
-plot(t, y(:,1), t, y(:,2))
-plot(t,u)
-plot(t,reference_signal.data);
-legend('theta', 'alpha','u','reference - alpha')
-xlim([4.8,Tsim])
+%yyaxis left
+ylabel('Measurements [rad]');
+plot(t, y(:,1),'LineWidth',2);
+plot(t, y(:,2),'LineWidth',2);
+plot(t,reference_signal.data,'LineWidth',2);
+xlim([6.0,Tsim])
+ylim([-1,1])
+yyaxis right
+plot(t,u,'-','LineWidth',1.5)
+legend('theta', 'alpha','reference - alpha','u','Location','northeast');%,'southwest');%
+xlim([6.0,Tsim])
+ylim([-1,1])
+xlabel('time [t]');
+ylabel('Input voltage u [V]');
+title('Disturbance LQR around stable equilibrium');
 
 figure(3);
 plot(t,y(:,1), t, y(:,2),t,x_hat(:,3) ,t,x_hat(:,4))

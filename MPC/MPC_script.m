@@ -20,7 +20,7 @@ if(stable_equi)
     alpha_bound = 2.2; %upper and lower bound for alpha
 else
     %settings unstable equi
-    Horizon_P = 6; %prediction horizon
+    Horizon_P = 8; %prediction horizon
     Horizon_C = 1; %controller horizon
     Q = diag([1e6 5e4 1e8 5e6]); %Q tuning states 4x4
     R = 1e-10; %R tuning input 1x1
@@ -61,6 +61,9 @@ bleq = [ones(2*Horizon_P,1); alpha_bound*ones(2*Horizon_P,1)];
 
 %Objective function 
 Objective_H = blkdiag(kron(eye(Horizon_P),Q) ,P, kron(eye(Horizon_P),R));
+
+%integrator
+Int_gain = -0.6;%-0.7;
 
 % x0 = [0;0;pi/16;0];
 % %% delete tomorrow

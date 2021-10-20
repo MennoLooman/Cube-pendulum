@@ -12,9 +12,9 @@ if ~exist('stable_equi','var')
 end
 if(stable_equi)
     %states:
-        Q1=1e6; %theta_d
-        Q2=1e4; %alpha_d
-        Q3=1e8; %theta
+        Q1=1e5; %theta_d
+        Q2=1e-3; %alpha_d
+        Q3=1e6; %theta
         Q4=1e6; %alpha
         Q_lqr = diag([Q1,Q2,Q3,Q4]);
     %input

@@ -22,8 +22,12 @@ MPC_script;
 
 %% Start experiment
 % load reference
+amplitude_ref = 0.5;
+omega_ref = 2;
 reference = zeros(N+1,1);
-reference_signal = timeseries(reference,t);
+reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(5/h,1)]*amplitude_ref; %block signal
+reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
+reference_signal = timeseries(reference1,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;
@@ -38,3 +42,23 @@ sim qubetemplate_kalman_and_MPC_2020b
 y = y_out.data;
 u = u_out.data;
 x_hat = x_hat_out.data;
+
+%% plot
+figure(2);
+clf
+hold on
+%yyaxis left
+ylabel('Measurements [rad]');
+plot(t, y(:,1),'LineWidth',2);
+plot(t, y(:,2),'LineWidth',2);
+plot(t,reference_signal.data,'LineWidth',2);
+xlim([6.0,Tsim])
+ylim([-1.1,1.1])
+yyaxis right
+plot(t,u,'-','LineWidth',2)
+legend('theta', 'alpha','reference - alpha','u','Location','southwest');%,'northeast');%
+xlim([6.0,Tsim])
+ylim([-1.1,1.1])
+xlabel('time [t]');
+ylabel('Input voltage u [V]');
+title('Reference tracking MPC step function around stable equilibrium');
