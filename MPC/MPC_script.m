@@ -62,9 +62,6 @@ bleq = [ones(2*Horizon_P,1); alpha_bound*ones(2*Horizon_P,1)];
 %Objective function 
 Objective_H = blkdiag(kron(eye(Horizon_P),Q) ,P, kron(eye(Horizon_P),R));
 
-%integrator
-Int_gain = -0.6;%-0.7;
-
 % x0 = [0;0;pi/16;0];
 % %% delete tomorrow
 % MPC_controller;

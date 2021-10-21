@@ -5,7 +5,14 @@
 clear;clc;
 hwinit;
 simulate_LQR = 0; %[0 run / 1 simulate]
-stable_equi = 1; %[0 unstable / 1 stable]
+stable_equi = 0; %[0 unstable / 1 stable]
+%integrator
+if stable_equi
+    Int_gain = -0.45;
+else
+    Int_gain = -0.005;
+end
+
 LQR_script;
 
 % Sample rate in sec.

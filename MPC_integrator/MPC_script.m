@@ -14,18 +14,18 @@ if(stable_equi)
     %settings stable equi
     Horizon_P = 6; %prediction horizon
     Horizon_C = 1; %controller horizon
-    Q = diag([1e6 5e4 1e8 5e6]); %Q tuning states 4x4
+    Q = diag([1e5 1e-3 1e6 1e6]); %Q tuning states 4x4
     R = 1e-10; %R tuning input 1x1
     beta = 1; %weight on terminal cost (final state)
     alpha_bound = 2.2; %upper and lower bound for alpha
 else
     %settings unstable equi
-    Horizon_P = 8; %prediction horizon
+    Horizon_P = 6; %prediction horizon
     Horizon_C = 1; %controller horizon
     Q = diag([1e6 5e4 1e8 5e6]); %Q tuning states 4x4
     R = 1e-10; %R tuning input 1x1
     beta = 1; %weight on terminal cost
-    alpha_bound = 1.4; %upper and lower bound for alpha
+    alpha_bound = 2.2; %upper and lower bound for alpha
 end
 
 %% get system matrices and kalm-filter observer
