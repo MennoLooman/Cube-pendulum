@@ -52,8 +52,15 @@ sim qubetemplate
 y = [theta(:,2) alpha(:,2)];
 
 %% Plot data
-plot(t, y(:,1), t, y(:,2))
-legend('theta', 'alpha')
+plot(t, y(:,1),'-o','DisplayName','theta');
+plot(t, y(:,2),'-o','DisplayName','alpha');
+xlabel("time [s]");
+ylabel("angle [rad]");
+title("Pendulum Swinging freely - o for sample");
+legend
+
+
+
 
 %% Save data
 save('data/AB/r5_AB.mat','u','y')
