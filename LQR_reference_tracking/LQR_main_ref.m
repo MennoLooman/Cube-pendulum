@@ -10,7 +10,7 @@ stable_equi = 0; %[0 unstable / 1 stable]
 if stable_equi
     Int_gain = -0.45;
 else
-    Int_gain = -0.005;
+    Int_gain = 0.001;
 end
 
 LQR_script;
@@ -46,8 +46,8 @@ amplitude_ref = 0.8;%0.3;
 omega_ref = 0.5;%0.5;
 reference = zeros(N+1,1);
 reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(5/h,1)]*amplitude_ref; %block signal
-reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
-reference_signal = timeseries(reference,t);
+reference2 = [zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
+reference_signal = timeseries(reference2,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;
@@ -66,34 +66,58 @@ u = u_out.data;
 x_hat = x_hat_out.data;
 
 %% Plot data
-
+%{
 figure(1);
 plot(t, x_hat(:,1), t,x_hat(:,2), t,x_hat(:,3) ,t,x_hat(:,4))
 legend('theta_d-hat', 'alpha_d-hat', 'theta-hat', 'alpha-hat');
 xlim([4.8,Tsim])
-
+%}
 figure(2);
 clf
 hold on
 %yyaxis left
 ylabel('Measurements [rad]');
-plot(t, y(:,1),'LineWidth',2);
-plot(t, y(:,2),'LineWidth',2);
-plot(t,reference_signal.data,'LineWidth',2);
+plot(t, y(:,1),'LineWidth',1.2);
+plot(t, y(:,2),'LineWidth',1.2);
+plot(t,reference_signal.data,'LineWidth',1.2);
 xlim([6.0,Tsim])
-ylim([-1,1])
-yyaxis right
-plot(t,u,'-','LineWidth',1.5)
-legend('theta', 'alpha','reference - alpha','u','Location','northeast');%,'southwest');%
-xlim([6.0,Tsim])
-ylim([-1,1])
-xlabel('time [t]');
-ylabel('Input voltage u [V]');
-title('Disturbance LQR around stable equilibrium');
 
+yyaxis right
+plot(t,u,'-','LineWidth',1.2)
+legend('theta', 'alpha','reference - alpha','u','Location','northeast');%,'southwest');%
+xlim([4.8,Tsim])
+ylim([-0.5 0.5])
+
+xlabel('time [s]');
+ylabel('Input voltage u [V]');
+title('Disturbance LQR around unstable equilibrium');
+%{
 figure(3);
 plot(t,y(:,1), t, y(:,2),t,x_hat(:,3) ,t,x_hat(:,4))
 legend('theta', 'alpha','theta_h_a_t', 'alpha_h_a_t');
 xlim([4.8,Tsim])
+title('Disturbance LQR around unstable equilibrium');
+ylabel("angle [rad]");
+xlabel("time [s]");
+%}
 %% Save data
 % save('data/AB/r5_AB.mat','u','y')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

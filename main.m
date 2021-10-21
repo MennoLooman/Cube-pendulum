@@ -48,12 +48,15 @@ sim qubetemplate
 
 %% Collect output data
 % (make sure that samples are taken every 'h' seconds! in 'To Workspace' block)
-
 y = [theta(:,2) alpha(:,2)];
+y_cut = y(3.1/h:5/h,:);
+t_cut = t(3.1/h:5/h,:);
 
-%% Plot data
-plot(t, y(:,1),'-o','DisplayName','theta');
-plot(t, y(:,2),'-o','DisplayName','alpha');
+figure(1)
+clf
+hold on
+plot(t_cut, y_cut(:,1),'-o','DisplayName','theta');
+plot(t_cut, y_cut(:,2),'-o','DisplayName','alpha');
 xlabel("time [s]");
 ylabel("angle [rad]");
 title("Pendulum Swinging freely - o for sample");

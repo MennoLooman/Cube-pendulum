@@ -14,7 +14,7 @@ h = 0.005;
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 20;
+Tsim = 10;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
@@ -49,24 +49,52 @@ u = u_out.data;
 x_hat = x_hat_out.data;
 
 %% Plot data
-
-figure(2);
+%{
+figure(1);
 plot(t, x_hat(:,1), t,x_hat(:,2), t,x_hat(:,3) ,t,x_hat(:,4))
 legend('theta_d-hat', 'alpha_d-hat', 'theta-hat', 'alpha-hat');
-xlim([4.8,Tsim])
+xlim([4.8,8])
+%}
+
+figure(2);
+clf
+hold on
+
+title("input and output for stable LQR with disturbance")
+xlabel("time [s]");
+
+plot(t, y(:,1), t, y(:,2))
+ylabel("angle [rad]");
+
+yyaxis right
+plot(t,u)
+ylabel("input u [-]");
+
+legend('theta', 'alpha','u')
+xlim([4.8,9])
+
+ax = gca;
+ax.YAxis(1).Color = 'k';
+ax.YAxis(2).Color = 'k';
 
 figure(3);
 clf
+subplot(2,1,1);
 hold on
-plot(t, y(:,1), t, y(:,2))
-plot(t,u)
-legend('theta', 'alpha','u')
-xlim([4.8,Tsim])
-ylim([-1.5 1.5])
-
-figure(4);
-plot(t,y(:,1), t, y(:,2),t,x_hat(:,3) ,t,x_hat(:,4))
+plot(t,y(:,1), t, y(:,2));
+plot(t,x_hat(:,3) ,t,x_hat(:,4))
+title("Observer estimate and measurement for stable LQR with disturbance")
+xlabel("time [s]");
+ylabel("angle [rad]");
 legend('theta', 'alpha','theta_h_a_t', 'alpha_h_a_t');
-xlim([4.8,Tsim])
+xlim([4.8,9])
+
+subplot(2,1,2);
+plot(t,x_hat(:,1) ,t,x_hat(:,2))
+xlabel("time [s]");
+ylabel("angular velocity [rad/s]");
+legend('theta-d_h_a_t', 'alpha-d_h_a_t');
+
+xlim([4.8,9])
 %% Save data
 % save('data/AB/r5_AB.mat','u','y')

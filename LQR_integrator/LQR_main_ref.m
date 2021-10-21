@@ -3,6 +3,9 @@
 % outputs to a variable in the Workspace for further processing.
 
 clear;clc;
+
+Int_gain = 1;
+
 hwinit;
 simulate_LQR = 0; %[0 run / 1 simulate]
 stable_equi = 1; %[0 unstable / 1 stable]
@@ -13,7 +16,7 @@ h = 0.005; %200Hz, works smoother than 100 Hz
 
 % Experiment duration in sec. 
 % (don't forget to change this in your diagram, see video)
-Tsim = 20;
+Tsim = 15;
 
 % Time vector (don't forget to transpose with ')
 t = [0:h:Tsim]';
@@ -59,12 +62,13 @@ u = u_out.data;
 x_hat = x_hat_out.data;
 
 %% Plot data
-
+%{
 figure(1);
 plot(t, x_hat(:,1), t,x_hat(:,2), t,x_hat(:,3) ,t,x_hat(:,4))
 legend('theta_d-hat', 'alpha_d-hat', 'theta-hat', 'alpha-hat');
 xlim([4.8,Tsim])
-
+%}
+%{
 figure(2);
 clf
 hold on
@@ -74,19 +78,40 @@ plot(t, y(:,1),'LineWidth',2);
 plot(t, y(:,2),'LineWidth',2);
 plot(t,reference_signal.data,'LineWidth',2);
 xlim([6.0,Tsim])
-ylim([-1,1])
+
 yyaxis right
 plot(t,u,'-','LineWidth',1.5)
 legend('theta', 'alpha','reference - alpha','u','Location','northeast');%,'southwest');%
-xlim([6.0,Tsim])
-ylim([-1,1])
+
 xlabel('time [t]');
 ylabel('Input voltage u [V]');
 title('Disturbance LQR around stable equilibrium');
+%}
+figure(2);
+clf
+hold on
 
+title("input and output for stable LQR-I with disturbance")
+xlabel("time [s]");
+
+plot(t, y(:,1), t, y(:,2))
+ylabel("angle [rad]");
+
+yyaxis right
+plot(t,u)
+ylabel("input u [-]");
+
+legend('theta', 'alpha','u')
+xlim([5.0,10])
+
+ax = gca;
+ax.YAxis(1).Color = 'k';
+ax.YAxis(2).Color = 'k';
+%{
 figure(3);
 plot(t,y(:,1), t, y(:,2),t,x_hat(:,3) ,t,x_hat(:,4))
 legend('theta', 'alpha','theta_h_a_t', 'alpha_h_a_t');
 xlim([4.8,Tsim])
+%}
 %% Save data
 % save('data/AB/r5_AB.mat','u','y')
