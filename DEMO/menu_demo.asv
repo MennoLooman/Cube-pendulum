@@ -151,34 +151,19 @@ ylabel('Input voltage u [V]');
 
 %% Construct title
 %title('Reference tracking MPCI sine function around unstable equilibrium');
+title_plt = '';
 if Reference_flag
-    title_plt1 = "Reference tracking ";
+    title_plt1 = 'Reference tracking ';
     if Reference_flag==2
-        title_plt4 = "sine function ";
+        title_plt3 = 'sine function ';
     else
-        title_plt4 = "step function ";
+        title_plt3 = 'step function ';
     end
 else
-    title_plt1 = "";
-    title_plt4 = "origin ";
+    title_plt1 = '';
+    title_plt3 = 'origin ';
 end
-if MPC_flag
-    title_plt2 = "MPC";
-else
-    title_plt2 = "LQR";
-end
-if Integrator_flag 
-    title_plt3 = "I ";
-else
-    title_plt3 = " ";
-end
-if Unstable_flag
-    title_plt5 = "around unstable equilibrium";
-else
-    title_plt5 = "around stable equilibrium";
-end
-
-title(strcat(title_plt1,title_plt2,title_plt3,title_plt4,title_plt5));
+title(title_plt);
 
 %% TODO's
 % TODO Matlab
