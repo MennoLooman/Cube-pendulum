@@ -2,7 +2,7 @@ close all;clear;clc;
 
 %% Genreal settings
 h = 0.005;
-Tsim = 30; %need: Tsim>5 for wait signal
+Tsim = 20; %need: Tsim>5 for wait signal
 
 %% Initial bool
 MPC_bool = false;
@@ -83,7 +83,7 @@ if Reference_flag
     sec_per_step = 3; % amount of seconds per step (and extra wait)
     if Reference_flag==2
         %sine ref
-        reference = [ zeros(wait+sec_per_step/h,1) ;sin(omega_ref* t(1:end-wait-sec_per_step/h))] * amplitude_ref;
+        reference = [ zeros((wait+sec_per_step)/h,1) ;sin(omega_ref* t(1:end-(wait+sec_per_step)/h))] * amplitude_ref;
     else
         %step ref
         dh = sec_per_step/h; %time steps per step
@@ -139,26 +139,24 @@ ylabel('Measurements [rad]');
 plot(t, y(:,1),'LineWidth',2);
 plot(t, y(:,2),'LineWidth',2);
 plot(t,reference_signal.data,'LineWidth',2);
-xlim([6.0,Tsim])
+xlim([wait,Tsim])
 ylim([-1.1,1.1])
 yyaxis right
 plot(t,u,'-','LineWidth',2)
 legend('theta', 'alpha','reference - alpha','u','Location','southwest');%,'northeast');%
-xlim([6.0,Tsim])
+xlim([wait,Tsim])
 ylim([-1.1,1.1])
 xlabel('time [s]');
 ylabel('Input voltage u [V]');
-title('Reference tracking MPCI sine function around unstable equilibrium');
+%title('Reference tracking MPCI sine function around unstable equilibrium');
+title('');
 
 %% TODO's
 % TODO Matlab
-% - fix plot
+% - fix plot title
 
 % TODO Simulink:
-% - add display while running
 % - make general files
-% - make safety if |theta|>1
-% - insert wait variable
 
 % Things to try:
 % - Test Demo file fully
