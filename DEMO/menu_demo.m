@@ -2,7 +2,8 @@ close all;clear;clc;
 
 %% Genreal settings
 h = 0.005;
-Tsim = 20; %need: Tsim>5 for wait signal
+Tsim = 20; %need: Tsim>wait_time
+wait_time = 5;
 
 %% Initial bool
 MPC_bool = false;
@@ -68,7 +69,7 @@ end
 
 %Build reference signal
 if Unstable_flag
-    wait = 5;
+    wait = wait_time;
     disp(strcat("You will have ",num2str(wait)," seconds at the start of the simulation to put the pendulum around the unstable operation point"));
     amplitude_ref = 0.8;%unstable
     omega_ref = 0.5;
@@ -150,7 +151,6 @@ xlabel('time [s]');
 ylabel('Input voltage u [V]');
 
 %% Construct title
-%title('Reference tracking MPCI sine function around unstable equilibrium');
 if Reference_flag
     title_plt1 = "Reference tracking ";
     if Reference_flag==2
@@ -182,10 +182,12 @@ title(strcat(title_plt1,title_plt2,title_plt3,title_plt4,title_plt5));
 
 %% TODO's
 % TODO Matlab
-% - fix plot title
+% - test plot title
+% - test integrator
+% - check LQR integrator gain
 
 % TODO Simulink:
-% - make general files
+% - test version integrator
 
 % Things to try:
 % - Test Demo file fully
