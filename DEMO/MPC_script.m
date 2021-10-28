@@ -21,6 +21,17 @@ end
 %% get system matrices and kalm-filter observer
 observer_script;
 
+%% Integrator
+if Integrator_flag
+    if Unstable_flag
+        Int_gain = 0.4; %unstable MPC %0.05
+    else
+        Int_gain = 0.8; %stable MPC
+    end
+else
+    Int_gain = 0;
+end
+
 %% make MPC controller
 Co = ctrb(Ac,Bc);
 if( length(Ac)-rank(Co) ~= 0)

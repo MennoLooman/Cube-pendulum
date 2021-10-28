@@ -1,9 +1,10 @@
-close all;clear;clc;
+clear;clc;
 
 %% Genreal settings
 h = 0.005;
 Tsim = 20; %need: Tsim>wait_time
 wait_time = 5;
+sec_per_step = 5; % amount of seconds per step (and extra wait)
 
 %% Initial bool
 MPC_bool = false;
@@ -33,46 +34,26 @@ while ~Integrator_bool
     if ~isempty(Integrator_flag) && ismember(Integrator_flag, [0, 1]); Integrator_bool = true; end 
 end
 
-disp('The controller can stabilize around the origin or track an reference');
+disp('The controller can stabilize around the origin or track a reference');
 while ~Reference_bool
     Reference_flag  = input('Origin[0] / Reference Step[1] / Reference Sine[2]: ');
     if ~isempty(Reference_flag) && ismember(Reference_flag, [0, 1, 2]); Reference_bool = true; end 
 end
 
 %% Summery
-disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+disp('~~~~~~~~~~~~~~~~~~~~~~Summery~~~~~~~~~~~~~~~~~~~~~~~');
 if MPC_flag; MPC_disp='MPC'; else; MPC_disp='LQR';end
 if Integrator_flag; Integrator_disp='I'; else; Integrator_disp='';end
 if Unstable_flag; Unstable_disp='unstable'; else; Unstable_disp='stable';end
-if Reference_flag; if Reference_flag==2; Reference_disp='while reference tracking an sine wave'; else; Reference_disp='while reference tracking an step function';end; else; Reference_disp='around the origin';end
+if Reference_flag; if Reference_flag==2; Reference_disp='while reference tracking a sine wave'; else; Reference_disp='while reference tracking a step function';end; else; Reference_disp='around the origin';end
 disp(strcat("Simulating ",MPC_disp,Integrator_disp," controller for the ",Unstable_disp," operation point ",Reference_disp,'.'));
 
-%% Build integrator and  reference
-%Integrator gain
-if Integrator_flag
-    if MPC_flag
-        if Unstable_flag
-            Int_gain = 0.05; %unstable MPC
-        else
-            Int_gain = 0.3; %stable MPC
-        end
-    else
-        if Unstable_flag
-            Int_gain = 0.01; %unstable LQR
-        else
-            Int_gain = 0.01; %stable LQR
-        end
-    end
-else
-    Int_gain = 0;
-end
-
-%Build reference signal
+%% Build reference
 if Unstable_flag
     wait = wait_time;
     disp(strcat("You will have ",num2str(wait)," seconds at the start of the simulation to put the pendulum around the unstable operation point"));
     amplitude_ref = 0.8;%unstable
-    omega_ref = 0.5;
+    omega_ref = 1;
 else
     wait = 0;
     amplitude_ref = 1; % stable
@@ -81,7 +62,6 @@ end
 
 t = [0:h:Tsim]';
 if Reference_flag
-    sec_per_step = 3; % amount of seconds per step (and extra wait)
     if Reference_flag==2
         %sine ref
         reference = [ zeros((wait+sec_per_step)/h,1) ;sin(omega_ref* t(1:end-(wait+sec_per_step)/h))] * amplitude_ref;
@@ -132,24 +112,6 @@ y = y_out.data;
 u = u_out.data;
 x_hat = x_hat_out.data;
 
-%% plot
-figure();
-clf
-hold on
-ylabel('Measurements [rad]');
-plot(t, y(:,1),'LineWidth',2);
-plot(t, y(:,2),'LineWidth',2);
-plot(t,reference_signal.data,'LineWidth',2);
-xlim([wait,Tsim])
-ylim([-1.1,1.1])
-yyaxis right
-plot(t,u,'-','LineWidth',2)
-legend('theta', 'alpha','reference - alpha','u','Location','southwest');%,'northeast');%
-xlim([wait,Tsim])
-ylim([-1.1,1.1])
-xlabel('time [s]');
-ylabel('Input voltage u [V]');
-
 %% Construct title
 if Reference_flag
     title_plt1 = "Reference tracking ";
@@ -178,6 +140,23 @@ else
     title_plt5 = "around stable equilibrium";
 end
 
+%% plot
+figure();
+clf
+hold on
+ylabel('Measurements [rad]');
+plot(t, y(:,1),'LineWidth',2);
+plot(t, y(:,2),'LineWidth',2);
+plot(t,reference_signal.data,'LineWidth',2);
+xlim([wait,Tsim])
+ylim([-1.1,1.1])
+yyaxis right
+plot(t,u,'-','LineWidth',2)
+legend('theta', 'alpha','reference - alpha','u','Location','southwest');%,'northeast');%
+xlim([wait,Tsim])
+ylim([-1.1,1.1])
+xlabel('time [s]');
+ylabel('Input voltage u [V]');
 title(strcat(title_plt1,title_plt2,title_plt3,title_plt4,title_plt5));
 
 %% TODO's
