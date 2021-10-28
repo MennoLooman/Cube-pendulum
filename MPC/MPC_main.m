@@ -17,7 +17,7 @@ t = [0:h:Tsim]';
 N = Tsim/h; %N+1 samples
 
 %MPC
-stable_equi = 1; %[0 unstable / 1 stable]
+stable_equi = 0; %[0 unstable / 1 stable]
 
 MPC_script;
 
@@ -28,7 +28,7 @@ omega_ref = 2;
 reference = zeros(N+1,1);
 reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(5/h,1)]*amplitude_ref; %block signal
 reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
-reference_signal = timeseries(reference1,t);
+reference_signal = timeseries(reference2,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;

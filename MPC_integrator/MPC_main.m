@@ -20,9 +20,9 @@ N = Tsim/h; %N+1 samples
 stable_equi = 0; %[0 unstable / 1 stable]
 %integrator
 if stable_equi
-    Int_gain = 0.3;
+    Int_gain = 0;%0.3;
 else
-    Int_gain = 0.05;%-0.015;
+    Int_gain = 0;%0.05;%-0.015;
 end
 
 MPC_script;
@@ -39,7 +39,7 @@ end
 reference = zeros(N+1,1);
 reference1 = [zeros(5/h+1,1);zeros(5/h,1);ones(5/h,1);-ones(5/h,1)]*amplitude_ref; %block signal
 reference2 = [ zeros(7/h,1) ;sin(omega_ref* t(1:end-7/h))] * amplitude_ref;
-reference_signal = timeseries(reference2,t);
+reference_signal = timeseries(reference,t);
 
 % load reference for reference tracking
 ds = Simulink.SimulationData.Dataset;
